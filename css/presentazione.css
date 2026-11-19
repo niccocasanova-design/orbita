@@ -1038,7 +1038,7 @@ body {
 .pr-animazioni .pr-rivela {
     opacity: 0;
     transform: translateY(32px);
-    transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 .pr-animazioni .pr-rivela.visibile {
@@ -1514,7 +1514,7 @@ body {
 }
 
 .carrello[open] {
-    animation: carrello-sale 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: carrello-sale 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 @keyframes carrello-sale {
@@ -1957,4 +1957,53 @@ select.carrello-quantita {
 
 .carrello-svuota[hidden] {
     display: none;
+}
+
+/* --- "Guardaci attraverso": più luminosa, perché al centro dello schermo si veda bene --- */
+.pr-attraverso-foresta {
+    filter: brightness(1.6) contrast(1.05) saturate(1.15);
+}
+
+/* la tinta della lente: a metà, così si capisce il colore ma la foresta resta luminosa */
+.pr-attraverso-tinta {
+    opacity: 0.55;
+}
+
+/* la foto statica (prima che parta la vista animata) ha tutto già "stampato": la schiarisco */
+.pr-indossa .pr-attraverso .pr-scatto {
+    filter: brightness(1.55) saturate(1.1);
+}
+
+.pr-attraverso-velo {
+    opacity: 0.06;
+}
+
+.pr-attraverso-strati::after {
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.15) 100%);
+}
+
+/* --- le quattro versioni: un po' più larghe della colonna di testo --- */
+.pr-sezione > .pr-versioni {
+    max-width: 1320px;
+}
+
+/* --- le versioni e i tre riquadri sotto "Scomponi": passandoci sopra si ingrandiscono leggermente.
+   Uso la proprietà "scale" (e non transform) perché transform lo usa già GSAP per farli comparire --- */
+.pr-versione,
+.pr-griglia .pr-riquadro:not(.pr-riquadro-largo) {
+    transition: scale 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
+}
+
+.pr-versione:hover,
+.pr-griglia .pr-riquadro:not(.pr-riquadro-largo):hover {
+    scale: 1.035;
+    z-index: 1;
+    box-shadow: 0 0 10px rgba(57, 255, 106, 0.8), 0 0 30px rgba(57, 255, 106, 0.35), inset 0 0 12px rgba(57, 255, 106, 0.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pr-versione:hover,
+    .pr-griglia .pr-riquadro:not(.pr-riquadro-largo):hover {
+        scale: none;
+    }
 }

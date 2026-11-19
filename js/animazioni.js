@@ -39,7 +39,7 @@
         });
     }
 
-    gsap.defaults({ ease: 'power3.out', duration: 0.9 });
+    gsap.defaults({ ease: 'power3.out', duration: 0.45 });
 
 
     // --- 1. la barra di avanzamento: una linea verde luminosa sotto la barra di navigazione ---
@@ -59,10 +59,10 @@
     if (eroe) {
         const titolo = eroe.querySelector('.pr-titolo');
         const lettere = new SplitText(titolo, { type: 'chars' });
-        const apertura = gsap.timeline({ delay: 0.15 });
+        const apertura = gsap.timeline({ delay: 0.05 });
         apertura
-            .from('.pr-nav', { yPercent: -100, autoAlpha: 0, duration: 0.8 })
-            .to(eroe.querySelector('.pr-sovratitolo'), { autoAlpha: 1, y: 0, startAt: { y: 16 }, duration: 0.6 }, '-=0.4')
+            .from('.pr-nav', { yPercent: -100, autoAlpha: 0, duration: 0.4 })
+            .to(eroe.querySelector('.pr-sovratitolo'), { autoAlpha: 1, y: 0, startAt: { y: 16 }, duration: 0.3 }, '-=0.2')
             .set(titolo, { autoAlpha: 1 }, '<')
             .from(lettere.chars, {
                 yPercent: 70,
@@ -70,20 +70,20 @@
                 autoAlpha: 0,
                 filter: 'blur(10px)',
                 transformOrigin: '50% 100%',
-                stagger: 0.07,
-                duration: 1.1,
+                stagger: 0.035,
+                duration: 0.55,
                 ease: 'expo.out'
-            }, '<0.1')
-            .to(eroe.querySelector('.pr-sottotitolo'), { autoAlpha: 1, y: 0, startAt: { y: 24 } }, '-=0.7')
-            .to(eroe.querySelector('.pr-link-azioni'), { autoAlpha: 1, y: 0, startAt: { y: 24 } }, '-=0.7')
+            }, '<0.05')
+            .to(eroe.querySelector('.pr-sottotitolo'), { autoAlpha: 1, y: 0, startAt: { y: 24 } }, '-=0.35')
+            .to(eroe.querySelector('.pr-link-azioni'), { autoAlpha: 1, y: 0, startAt: { y: 24 } }, '-=0.35')
             .to(eroe.querySelector('.pr-eroe-vista'), {
                 autoAlpha: 1,
                 scale: 1,
                 y: 0,
                 startAt: { scale: 0.9, y: 60 },
-                duration: 1.4,
+                duration: 0.7,
                 ease: 'expo.out'
-            }, '-=0.6');
+            }, '-=0.3');
         segna(eroe.querySelectorAll('.pr-rivela'));
     }
 
@@ -96,8 +96,8 @@
             yPercent: 80,
             autoAlpha: 0,
             filter: 'blur(6px)',
-            stagger: 0.08,
-            duration: 1,
+            stagger: 0.04,
+            duration: 0.5,
             scrollTrigger: { trigger: titolo, start: 'top 85%', once: true }
         });
         segna(titolo);
@@ -111,7 +111,7 @@
         gsap.set(frase, { autoAlpha: 1 });
         gsap.fromTo(parole.words, { opacity: 0.12 }, {
             opacity: 1,
-            stagger: 0.1,
+            stagger: 0.05,
             ease: 'none',
             scrollTrigger: { trigger: frase, start: 'top 80%', end: 'bottom 45%', scrub: true }
         });
@@ -130,14 +130,14 @@
                 autoAlpha: 1,
                 y: 0,
                 startAt: { y: 70 },
-                stagger: 0.14,
-                duration: 1.1,
+                stagger: 0.07,
+                duration: 0.55,
                 overwrite: true
             });
             // le foto dentro partono un po' ingrandite e si assestano
             gsap.from(gruppo.map(function(scheda) {
                 return scheda.querySelector('img');
-            }).filter(Boolean), { scale: 1.12, duration: 1.6, stagger: 0.14, ease: 'power2.out' });
+            }).filter(Boolean), { scale: 1.12, duration: 0.8, stagger: 0.07, ease: 'power2.out' });
         }
     });
 
@@ -147,7 +147,7 @@
         gsap.to(prezzoGargoz, {
             textShadow: '0 0 6px rgba(255, 143, 200, 0.9), 0 0 22px rgba(255, 143, 200, 0.6)',
             color: '#ffb3dc',
-            duration: 1.4,
+            duration: 0.7,
             ease: 'sine.inOut',
             repeat: -1,
             yoyo: true
@@ -159,12 +159,12 @@
     const attraverso = document.querySelector('.pr-attraverso.pr-rivela');
     if (attraverso) {
         gsap.set(attraverso, { autoAlpha: 1 });
-        gsap.fromTo(attraverso, { scale: 0.86, y: 80, opacity: 0.2 }, {
+        gsap.fromTo(attraverso, { scale: 0.9, y: 60 }, {
             scale: 1,
             y: 0,
             opacity: 1,
             ease: 'none',
-            scrollTrigger: { trigger: attraverso, start: 'top 95%', end: 'center 55%', scrub: 0.6 }
+            scrollTrigger: { trigger: attraverso, start: 'top 95%', end: 'top 60%', scrub: 0.3 }
         });
         segna(attraverso);
     }
@@ -178,7 +178,7 @@
         gsap.from(righe, {
             x: -40,
             autoAlpha: 0,
-            stagger: 0.07,
+            stagger: 0.035,
             scrollTrigger: { trigger: specifiche, start: 'top 85%', once: true }
         });
         // solo i numeri scritti a mano (5, 6, 4...): le misure le scrive js/visore3d.js quando legge il file
@@ -192,7 +192,7 @@
             testo.nodeValue = '0';
             gsap.to(conta, {
                 n: valore,
-                duration: 1.2,
+                duration: 0.6,
                 ease: 'power2.out',
                 scrollTrigger: { trigger: dd, start: 'top 90%', once: true },
                 onUpdate: function() {
@@ -211,15 +211,15 @@
         gsap.from(pezzi, {
             y: 60,
             autoAlpha: 0,
-            stagger: 0.15,
-            duration: 1.1,
+            stagger: 0.075,
+            duration: 0.55,
             scrollTrigger: { trigger: configura, start: 'top 80%', once: true }
         });
         gsap.from(configura.querySelectorAll('.vista'), {
             y: 30,
             autoAlpha: 0,
-            stagger: 0.06,
-            duration: 0.7,
+            stagger: 0.03,
+            duration: 0.35,
             scrollTrigger: { trigger: configura.querySelector('.viste') || configura, start: 'top 92%', once: true }
         });
     }
@@ -231,7 +231,7 @@
             start: 'top 88%',
             once: true,
             onEnter: function() {
-                gsap.from(galleria.children, { y: 40, autoAlpha: 0, scale: 0.94, stagger: 0.05, duration: 0.8 });
+                gsap.from(galleria.children, { y: 40, autoAlpha: 0, scale: 0.94, stagger: 0.025, duration: 0.4 });
             }
         });
     }
@@ -240,15 +240,15 @@
     // --- 9. i bottoni magnetici: col mouse sopra si spostano un po' verso il puntatore ---
     if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
         gsap.utils.toArray('.pr .pr-bottone, .pr-nav-azione').forEach(function(bottone) {
-            const versoX = gsap.quickTo(bottone, 'x', { duration: 0.4, ease: 'power3.out' });
-            const versoY = gsap.quickTo(bottone, 'y', { duration: 0.4, ease: 'power3.out' });
+            const versoX = gsap.quickTo(bottone, 'x', { duration: 0.2, ease: 'power3.out' });
+            const versoY = gsap.quickTo(bottone, 'y', { duration: 0.2, ease: 'power3.out' });
             bottone.addEventListener('pointermove', function(evento) {
                 const box = bottone.getBoundingClientRect();
                 versoX((evento.clientX - box.left - box.width / 2) * 0.3);
                 versoY((evento.clientY - box.top - box.height / 2) * 0.4);
             });
             bottone.addEventListener('pointerleave', function() {
-                gsap.to(bottone, { x: 0, y: 0, duration: 0.8, ease: 'elastic.out(1, 0.4)', overwrite: 'auto' });
+                gsap.to(bottone, { x: 0, y: 0, duration: 0.4, ease: 'elastic.out(1, 0.4)', overwrite: 'auto' });
             });
         });
     }
@@ -262,7 +262,7 @@
         start: 'top 90%',
         once: true,
         onEnter: function(gruppo) {
-            gsap.to(gruppo, { autoAlpha: 1, y: 0, startAt: { y: 40 }, stagger: 0.1, overwrite: true });
+            gsap.to(gruppo, { autoAlpha: 1, y: 0, startAt: { y: 40 }, stagger: 0.05, overwrite: true });
         }
     });
 

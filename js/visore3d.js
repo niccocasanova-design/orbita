@@ -1482,10 +1482,10 @@ function mostraProspettiva(casella, indice, evento) {
         }
     })
         .fromTo(sopra, { autoAlpha: 1, clipPath: 'circle(0% at ' + x + ' ' + y + ')', filter: 'blur(6px) brightness(1.4)' },
-            { clipPath: 'circle(150% at ' + x + ' ' + y + ')', filter: 'blur(0px) brightness(1)', duration: 0.7, ease: 'power3.inOut' })
-        .to(base, { scale: 0.96, duration: 0.7, ease: 'power3.inOut' }, 0)
-        .fromTo(etichetta, { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: 'power2.out' }, 0.25)
-        .to(etichetta, { autoAlpha: 0, duration: 0.4 }, 1.6);
+            { clipPath: 'circle(150% at ' + x + ' ' + y + ')', filter: 'blur(0px) brightness(1)', duration: 0.35, ease: 'power3.inOut' })
+        .to(base, { scale: 0.96, duration: 0.35, ease: 'power3.inOut' }, 0)
+        .fromTo(etichetta, { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.2, ease: 'power2.out' }, 0.1)
+        .to(etichetta, { autoAlpha: 0, duration: 0.25 }, 1.0);
 }
 
 
@@ -1862,7 +1862,7 @@ async function fotoInPrimaPersona(fotografo, studioScena, studio, larghezza, alt
         bianco.dispose();
 
         // il colore della lente, appena schiarito (una lente da sole lascia passare parecchia luce)
-        const colore = lenti[0].material.color.clone().lerp(new THREE.Color(1, 1, 1), 0.05);
+        const colore = lenti[0].material.color.clone().lerp(new THREE.Color(1, 1, 1), 0.4);
         const tinta = nuovaTela(larghezza, altezza);
         const pennelloTinta = tinta.getContext('2d');
         pennelloTinta.drawImage(fotografo.domElement, 0, 0);
