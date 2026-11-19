@@ -1,0 +1,472 @@
+/* configuratore.css – la sezione "In mostra" con il visualizzatore 3D
+   (si aggiunge a stile_esercizio4.css senza modificarlo) */
+
+.sezione-configuratore {
+    padding-top: 48px;
+}
+
+/* ===== visore 3D (colonna sinistra) ===== */
+/* PASSO 3: il visore */
+.visore {
+    position: relative;
+    width: 100%;
+    height: 675px;
+    background: #f3efe8;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+
+/* il canvas creato da Three.js riempie il visore (ci servirà dall'es. 2) */
+.visore canvas {
+    display: block;
+}
+
+/* PASSO 4: la scritta al centro del visore (ora: "Carico il modello…" mentre arriva un modello) */
+.visore-segnaposto {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    color: #1e1e1e;
+    text-align: center;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.85);   /* fondo chiaro: si legge anche sopra il modello */
+    border-radius: 999px;
+    font-size: 14px;
+    z-index: 1;
+    pointer-events: none;   /* non blocca il trascinamento */
+}
+
+.visore-segnaposto[hidden] {
+    display: none;
+}
+
+
+/* ===== pannello opzioni (colonna destra) ===== */
+.pannello {
+    padding: 8px 0 32px 0;
+}
+
+.sovratitolo {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.5);
+    margin: 0 0 4px 0;
+}
+
+.descrizione {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.opzione {
+    border-top: solid 1px #e5e0d6;
+    padding: 16px 0;
+}
+
+.opzione-titolo {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.opzione-valore {
+    font-weight: normal;
+    color: rgba(0, 0, 0, 0.55);
+}
+
+/* PASSO 5: i campioni in fila */
+.campioni {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* PASSO 6: i campioni diventano cerchi e quello scelto si riconosce */
+.campione {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border-radius: 50%;
+    border: solid 1px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.campione:hover {
+    transform: scale(1.1);
+}
+
+.campione.selected {
+    outline: solid 2px #1e1e1e;
+    outline-offset: 2px;
+}
+
+
+/* i bottoni delle versioni (Vulcano, Aputa, Ape) e della modalità (Chiuso, Aperto, Indossato, Scomponi): rettangoli con gli angoli molto stondati */
+.preset-gruppo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.preset,
+.modalita,
+.scomponi {
+    background: #ffffff;
+    color: #1e1e1e;
+    border: solid 1px #d8d2c6;
+    border-radius: 999px;   /* valore alto = lati corti completamente arrotondati */
+    padding: 10px 20px;
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.preset:hover,
+.modalita:hover,
+.scomponi:hover {
+    border-color: #1e1e1e;
+}
+
+.preset.selected,
+.modalita.selected,
+.scomponi.selected {
+    background: #1e1e1e;
+    border-color: #1e1e1e;
+    color: #ffffff;
+}
+
+/* ===== le viste sotto il visore ===== */
+/* 6 caselle in fila su computer, 3 su tablet e telefono */
+.viste {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    margin-top: 12px;
+}
+
+/* ogni casella è un bottone: tolgo l'aspetto standard del browser */
+.vista {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+/* la tela della vista: fondo bianco come le viste fisse, proporzioni 4:3 */
+.vista canvas {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: #ffffff;
+    border-radius: 4px;
+    outline: solid 2px transparent;
+    outline-offset: 2px;
+    transition: outline-color 0.15s ease;
+}
+
+/* passando sopra con il mouse: bordo chiaro; casella scelta (quella nel riquadro grande): bordo scuro */
+.vista:hover canvas {
+    outline-color: #d8d2c6;
+}
+
+/* la casella 3D tiene il fondo della stanza, come il visore */
+.vista[data-vista="3d"] canvas {
+    background: #f3efe8;
+}
+
+.vista.selected canvas {
+    outline-color: #1e1e1e;
+}
+
+.vista.selected .vista-nome {
+    color: #1e1e1e;
+    font-weight: bold;
+}
+
+.vista-nome {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.55);
+}
+
+@media (max-width: 991px) {
+    .viste {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+
+/* ===== la galleria degli altri occhiali ===== */
+/* 4 caselle per riga su computer, 3 su tablet, 2 su telefono */
+.galleria {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px 16px;
+}
+
+/* ogni casella è un link alla pagina di dettaglio: tolgo l'aspetto standard dei link */
+.modello {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+/* l'anteprima: fondo bianco come le viste fisse, proporzioni 4:3.
+   Finché non è pronta, la casella "pulsa" piano per far capire che sta caricando */
+.modello canvas {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: #ffffff;
+    border-radius: 4px;
+    outline: solid 2px transparent;
+    outline-offset: 2px;
+    transition: outline-color 0.15s ease;
+    animation: anteprima-in-arrivo 1.4s ease-in-out infinite;
+}
+
+.modello.pronta canvas,
+.modello.errore canvas {
+    animation: none;
+}
+
+@keyframes anteprima-in-arrivo {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.55; }
+}
+
+.modello:hover canvas {
+    outline-color: #d8d2c6;
+}
+
+/* il modello mostrato ora nel visore: bordo scuro e nome in grassetto */
+.modello.selected canvas {
+    outline-color: #1e1e1e;
+}
+
+.modello-nome {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.modello.selected .modello-nome {
+    color: #1e1e1e;
+    font-weight: bold;
+}
+
+/* sotto il nome: chi l'ha progettato e il prezzo */
+.modello-info {
+    display: block;
+    margin-top: 2px;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 991px) {
+    .galleria {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 575px) {
+    .galleria {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+/* ===== la tendina Personalizzazione ===== */
+.tendina {
+    border-top: solid 1px #e5e0d6;
+}
+
+/* il titolo cliccabile: testo a sinistra, freccetta a destra */
+.tendina-titolo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    font-weight: bold;
+    cursor: pointer;
+    list-style: none;   /* tolgo il triangolino standard del browser (Firefox, Chrome) */
+}
+
+.tendina-titolo::-webkit-details-marker {
+    display: none;      /* tolgo il triangolino standard del browser (Safari) */
+}
+
+.tendina-titolo:hover .freccia {
+    border-color: #1e1e1e;
+}
+
+/* la freccetta: un quadratino con solo due bordi, girato di 45° = una "v" che punta in basso */
+.freccia {
+    width: 9px;
+    height: 9px;
+    border-right: solid 2px rgba(0, 0, 0, 0.55);
+    border-bottom: solid 2px rgba(0, 0, 0, 0.55);
+    transform: translateY(-3px) rotate(45deg);
+    transition: transform 0.2s ease;
+}
+
+/* tendina aperta: la freccetta si gira e punta in alto */
+.tendina[open] .freccia {
+    transform: translateY(2px) rotate(-135deg);
+}
+
+/* a destra del titolo: la scelta attiva (es. "Aperto") e la freccetta, una accanto all'altra */
+.tendina-destra {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* nelle tendine Modalità e Versioni: un po' di spazio sotto i bottoni */
+.tendina > .preset-gruppo {
+    padding-bottom: 16px;
+}
+
+/* l'ultima tendina del pannello si chiude con una linea sotto */
+.tendina:last-of-type {
+    border-bottom: solid 1px #e5e0d6;
+}
+
+/* quando si apre, il contenuto compare con una piccola dissolvenza */
+.tendina[open] > .preset-gruppo,
+.tendina[open] .opzione {
+    animation: apri-tendina 0.25s ease;
+}
+
+@keyframes apri-tendina {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ===== nota e bottone ===== */
+.nota {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.55);
+    border-top: solid 1px #e5e0d6;
+    padding-top: 16px;
+    margin: 0;
+}
+
+.btn-principale {
+    display: block;
+    width: 100%;
+    background: #e06a35;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 14px;
+    font: inherit;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-principale:hover {
+    background: #c4541f;
+}
+
+/* ===== media query del configuratore ===== */
+@media (max-width: 991px) {
+    /* PASSO 8: il visore su tablet e telefono */
+    .visore {
+        height: 420px;
+    }
+}
+
+/* il grigio a pois rosa (solo per Orbita, versione Gargoz): il campione mostra i pois */
+.campione-pois {
+    background-color: #8e9196;
+    background-image: radial-gradient(#ff8fc8 30%, transparent 33%);
+    background-size: 9px 9px;
+}
+
+/* le scelte di un solo modello (data-solo) si nascondono con gli altri modelli */
+.pannello [data-solo][hidden] {
+    display: none;
+}
+
+/* --- le caselle della galleria: due tele una sopra l'altra per passare da una prospettiva all'altra --- */
+.modello-foto {
+    position: relative;
+    display: block;
+    border-radius: 10px;
+}
+
+/* la tela sopra: invisibile finché non si apre a cerchio (js/visore3d.js, mostraProspettiva) */
+.modello .modello-dopo,
+body .modello .modello-dopo,
+body .modello:hover .modello-dopo,
+body .modello.selected .modello-dopo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    outline: none;
+    box-shadow: none;
+    border-radius: 0;
+    animation: none;
+    visibility: hidden;
+    opacity: 0;
+    will-change: clip-path, transform;
+}
+
+.modello-foto > canvas:first-child {
+    border-radius: 10px;
+    transform-origin: 50% 50%;
+}
+
+/* il nome della prospettiva, che compare per un attimo in basso a sinistra */
+.modello-vista-nome {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    color: #39ff6a;
+    background: rgba(0, 0, 0, 0.7);
+    border: solid 1px rgba(57, 255, 106, 0.6);
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* passandoci sopra la casella si solleva appena */
+.modello {
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.modello:hover {
+    transform: translateY(-4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .modello:hover {
+        transform: none;
+    }
+}

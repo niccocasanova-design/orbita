@@ -1,0 +1,359 @@
+/* tema-verde.css: tutto il sito nero, con le scritte verdi luminose come i vecchi monitor a fosfori.
+   I caratteri restano quelli di prima: cambiano solo i colori.
+   Va caricato DOPO gli altri fogli di stile, perché ne sovrascrive i colori.
+   I riquadri non hanno più un fondo: solo un contorno verde sottile e luminoso */
+
+:root {
+    --verde: #39ff6a;                              /* il verde dei fosfori, acceso */
+    --verde-tenue: #22b84a;                        /* per i testi secondari */
+    --verde-scuro: #0f5a24;                        /* per le linee di separazione */
+    --bagliore: 0 0 4px rgba(57, 255, 106, 0.75), 0 0 14px rgba(57, 255, 106, 0.35);
+    --bagliore-tenue: 0 0 4px rgba(57, 255, 106, 0.4);
+    --contorno: solid 1px var(--verde);
+    --alone: 0 0 6px rgba(57, 255, 106, 0.55), 0 0 18px rgba(57, 255, 106, 0.18), inset 0 0 10px rgba(57, 255, 106, 0.12);
+
+    /* i colori della presentazione, riusati da presentazione.css */
+    --pr-testo: var(--verde);
+    --pr-grigio: var(--verde-tenue);
+    --pr-chiaro: #000000;
+    --pr-bianco: #000000;
+    --pr-scuro: #000000;
+    --pr-scuro-riquadro: #000000;
+    --pr-accento: var(--verde);
+    --pr-accento-scuro: var(--verde);
+    --pr-bordo: var(--verde-scuro);
+}
+
+html,
+body {
+    background: #000000;
+    color: var(--verde);
+}
+
+body {
+    text-shadow: var(--bagliore);
+}
+
+/* il testo selezionato: verde pieno con le lettere nere */
+::selection {
+    background: var(--verde);
+    color: #000000;
+    text-shadow: none;
+}
+
+
+/* ===== tutti i testi in verde ===== */
+body .pr,
+body .pr-scuro,
+body .pr-titolo,
+body .pr-titolo-sezione,
+body .pr-riquadro h3,
+body .pr-versione strong,
+body .pr-specifiche dt,
+body .pr-specifiche dd,
+body .font-3,
+body .opzione-titolo,
+body .tendina-titolo,
+body .vista.selected .vista-nome,
+body .modello.selected .modello-nome,
+body .carrello-riga-testo strong,
+body .prova h2 {
+    color: var(--verde);
+}
+
+/* i testi secondari: un verde più spento, con un bagliore più leggero */
+body .pr-grigio,
+body .pr-testo-largo,
+body .pr-provali .pr-testo-largo,
+body .pr-riquadro-testo p:last-child,
+body .pr-scuro .pr-riquadro-testo p:last-child,
+body .pr-versione figcaption,
+body .pr-specifiche small,
+body .pr-provali-scelta p,
+body .pr-dettaglio-testa .pr-sottotitolo,
+body .sovratitolo,
+body .descrizione,
+body .opzione-valore,
+body .vista-nome,
+body .modello-nome,
+body .modello-info,
+body .nota,
+body .pannello-nota,
+body .carrello-riga-testo,
+body .carrello-vuoto,
+body .prova p,
+body .prova li,
+body .prova-scegli,
+body .pr-credito,
+body .color-gray {
+    color: var(--verde-tenue);
+    text-shadow: var(--bagliore-tenue);
+}
+
+/* le etichette sopra i titoli ("Nuovo", "Scomponi"...): erano arancioni, ora verde acceso */
+body .pr-sovratitolo,
+body .pr-scuro .pr-sovratitolo {
+    color: var(--verde);
+}
+
+/* i link */
+body .pr a,
+body .pr-scuro a,
+body .pr .pr-nav-marchio,
+body .pr .pr-nav-link a,
+body .pr-scuro .pr-credito a,
+body .nav-link {
+    color: var(--verde);
+}
+
+
+/* ===== la barra di navigazione: nera e traslucida, con una linea verde sotto ===== */
+body .pr-nav {
+    background: rgba(0, 0, 0, 0.82);
+    border-bottom: var(--contorno);
+    box-shadow: 0 0 10px rgba(57, 255, 106, 0.35);
+}
+
+body .pr-nav-menu,
+body .pr-nav-carrello {
+    color: var(--verde);
+}
+
+body .pr-nav-conteggio {
+    background: var(--verde);
+    color: #000000;
+    text-shadow: none;
+}
+
+@media (max-width: 833px) {
+    body .pr-nav-link {
+        background: rgba(0, 0, 0, 0.96);
+        border-bottom: var(--contorno);
+    }
+}
+
+
+/* ===== i bottoni: contorno verde luminoso; passandoci sopra si riempiono di verde ===== */
+body .pr .pr-bottone,
+body .pr .pr-nav-azione,
+body .btn-principale,
+body .scomponi,
+body .preset,
+body .modalita {
+    background: transparent;
+    color: var(--verde);
+    border: var(--contorno);
+    box-shadow: var(--alone);
+    text-shadow: var(--bagliore);
+}
+
+body .pr .pr-bottone:hover,
+body .pr .pr-nav-azione:hover,
+body .btn-principale:hover,
+body .scomponi:hover,
+body .preset:hover,
+body .modalita:hover,
+body .scomponi.selected,
+body .preset.selected,
+body .modalita.selected {
+    background: var(--verde);
+    color: #000000;
+    border-color: var(--verde);
+    text-shadow: none;
+    box-shadow: 0 0 14px rgba(57, 255, 106, 0.7);
+}
+
+/* i bottoni di solo testo (Annulla, Chiudi, quantità del carrello...) */
+body .prova-annulla,
+body .prova-chiudi,
+body .carrello-chiudi,
+body .carrello-indietro,
+body .carrello-togli {
+    color: var(--verde);
+}
+
+body .carrello-quantita button:not(.carrello-togli) {
+    background: transparent;
+    color: var(--verde);
+    border: var(--contorno);
+}
+
+
+/* ===== i riquadri: niente fondo, solo un contorno verde sottile e luminoso ===== */
+body .pr-riquadro,
+body .pr-riquadro.pr-scuro,
+body .pr-versione,
+body .pr-provali-scelta,
+body .pannello,
+body .visore,
+body .carrello-avviso {
+    background: transparent;
+    border: var(--contorno);
+    box-shadow: var(--alone);
+}
+
+/* il riquadro nero "Scomponi" è largo tutto lo schermo: il contorno solo sopra e sotto */
+body .pr-sezione#design .pr-riquadro-largo {
+    border-left: none;
+    border-right: none;
+}
+
+/* le sezioni chiare (apertura, versioni, provali, finale) diventano nere */
+body .pr-eroe,
+body .pr-chiaro,
+body .pr-finale,
+body .pr-scuro {
+    background: #000000;
+}
+
+/* il pannello del configuratore: un po' di aria dentro il contorno */
+body .pannello {
+    padding: 24px;
+    border-radius: 12px;
+}
+
+/* le caselle delle viste e della galleria: il contorno verde al posto di quello grigio */
+body .vista canvas,
+body .modello canvas,
+body .vista[data-vista="3d"] canvas {
+    background: #000000;
+    outline: var(--contorno);
+    box-shadow: var(--alone);
+}
+
+body .vista:hover canvas,
+body .modello:hover canvas,
+body .vista.selected canvas,
+body .modello.selected canvas {
+    outline: solid 2px var(--verde);
+    box-shadow: 0 0 12px rgba(57, 255, 106, 0.7);
+}
+
+/* il "Carico il modello…" sopra il visore */
+body .visore-segnaposto {
+    background: rgba(0, 0, 0, 0.85);
+    color: var(--verde);
+    border: var(--contorno);
+}
+
+
+/* ===== le linee di separazione: verde scuro ===== */
+body .pr-specifiche,
+body .pr-specifiche div,
+body .opzione,
+body .tendina,
+body .tendina:last-of-type,
+body .nota,
+body .pannello-acquisto,
+body .carrello-riga,
+body .carrello-conti,
+body .carrello-riepilogo li {
+    border-color: var(--verde-scuro);
+}
+
+body .freccia {
+    border-color: var(--verde);
+}
+
+/* i campioni dei colori restano del loro colore (sono il prodotto): solo il contorno è verde */
+body .campione {
+    border: solid 1px var(--verde-scuro);
+}
+
+body .campione.selected {
+    box-shadow: 0 0 0 2px #000000, 0 0 0 3px var(--verde), 0 0 10px rgba(57, 255, 106, 0.7);
+}
+
+
+/* ===== l'esploso: le etichette dei pezzi e il suggerimento ===== */
+body .pr-esploso-etichetta,
+body .pr-esploso-suggerimento {
+    background: rgba(0, 0, 0, 0.75);
+    color: var(--verde);
+    border: var(--contorno);
+    box-shadow: var(--alone);
+}
+
+body .pr-esploso-etichetta::before {
+    background: var(--verde);
+    box-shadow: 0 0 0 3px rgba(57, 255, 106, 0.25), 0 0 8px var(--verde);
+}
+
+
+/* ===== le finestre (prova con la fotocamera, carrello) ===== */
+body .prova,
+body .carrello {
+    background: #000000;
+    color: var(--verde);
+    border: var(--contorno);
+    box-shadow: var(--alone);
+}
+
+body .prova-specchio {
+    background: #000000;
+    border: var(--contorno);
+}
+
+/* il codice QR resta nero su bianco: altrimenti il telefono non riesce a leggerlo */
+body .prova-qr {
+    background: #ffffff;
+    box-shadow: var(--alone);
+}
+
+body .prova p.prova-qr-avviso {
+    background: transparent;
+    color: var(--verde);
+    border: var(--contorno);
+}
+
+body .prova-fotocamere,
+body .carrello input,
+body .carrello select,
+body .carrello textarea {
+    background: #000000;
+    color: var(--verde);
+    border: var(--contorno);
+}
+
+/* le icone disegnate (telefono e computer nella sezione Provali) */
+body .pr-provali-icona {
+    stroke: var(--verde);
+    filter: drop-shadow(0 0 4px rgba(57, 255, 106, 0.7));
+}
+
+/* le foto della presentazione restano a colori, ma senza il fondo chiaro */
+body .pr-attraverso {
+    border: var(--contorno);
+    box-shadow: var(--alone);
+}
+
+body .pr-attraverso-aiuto,
+body .pr-attraverso-stato {
+    color: var(--verde-tenue);
+    text-shadow: var(--bagliore-tenue);
+}
+
+/* il riepilogo e le righe della borsa: contorno verde sottile */
+body .carrello-riepilogo {
+    border: var(--contorno);
+    box-shadow: var(--alone);
+}
+
+body .carrello-riga {
+    border-bottom: solid 1px var(--verde-scuro);
+}
+
+body .carrello-campi input,
+body select.carrello-quantita {
+    background: #000000;
+    color: var(--verde);
+    border: var(--contorno);
+}
+
+body .carrello-tessera small,
+body .carrello-sotto,
+body .carrello-rate,
+body .carrello-riga-colori,
+body .carrello-riga-dettaglio {
+    color: var(--verde-tenue);
+}

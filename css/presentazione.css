@@ -1,0 +1,1925 @@
+/* presentazione.css: la parte alta della pagina, in stile pagina prodotto.
+   Tutte le classi iniziano con "pr-" per non mescolarsi con quelle del configuratore */
+
+/* i colori della presentazione, in un posto solo */
+:root {
+    --pr-testo: #1d1d1f;          /* quasi nero: più morbido del nero puro */
+    --pr-grigio: #6e6e73;         /* testi secondari */
+    --pr-chiaro: #f5f5f7;         /* fondo grigio chiarissimo */
+    --pr-bianco: #ffffff;
+    --pr-scuro: #000000;
+    --pr-scuro-riquadro: #1d1d1f;
+    --pr-accento: #0071e3;        /* il blu dei link e dei bottoni */
+    --pr-accento-scuro: #2997ff;  /* lo stesso blu, più chiaro, per i fondi scuri */
+    --pr-bordo: #d2d2d7;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 56px;     /* i link interni non finiscono sotto la barra di navigazione */
+}
+
+body {
+    background: var(--pr-bianco);
+}
+
+/* il carattere: quello di sistema (su Mac e iPhone è SF Pro) */
+.pr {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--pr-testo);
+    line-height: 1.47;
+    -webkit-font-smoothing: antialiased;
+}
+
+.pr a {
+    color: var(--pr-accento);
+    text-decoration: none;
+}
+
+.pr a:hover {
+    text-decoration: underline;
+}
+
+.pr-grigio {
+    color: var(--pr-grigio);
+}
+
+.pr-centro {
+    text-align: center;
+}
+
+
+/* ===== barra di navigazione: traslucida e sfocata, resta in alto ===== */
+.pr-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(251, 251, 253, 0.8);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: solid 1px rgba(0, 0, 0, 0.08);
+}
+
+.pr-nav-dentro {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 22px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.pr .pr-nav-marchio {
+    color: var(--pr-testo);
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-right: auto;
+}
+
+.pr-nav-link {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.pr .pr-nav-link a {
+    color: var(--pr-testo);
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.pr .pr-nav-link a:hover {
+    opacity: 1;
+    text-decoration: none;
+}
+
+.pr .pr-nav-azione {
+    background: var(--pr-accento);
+    color: var(--pr-bianco);
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 999px;
+}
+
+.pr .pr-nav-azione:hover {
+    text-decoration: none;
+    background: #0077ed;
+}
+
+.pr-nav-menu {
+    display: none;
+    font: inherit;
+    font-size: 12px;
+    background: none;
+    border: none;
+    color: var(--pr-testo);
+    cursor: pointer;
+    padding: 4px 0;
+}
+
+
+/* ===== l'apertura ===== */
+.pr-eroe {
+    background: var(--pr-chiaro);
+    text-align: center;
+    padding: 72px 22px 0;
+    overflow: hidden;
+}
+
+.pr-sovratitolo {
+    font-size: 17px;
+    font-weight: 600;
+    color: #bf4800;             /* arancio, come le etichette "Nuovo" */
+    margin: 0 0 6px;
+}
+
+.pr-scuro .pr-sovratitolo {
+    color: #f56300;
+}
+
+.pr-titolo {
+    font-size: clamp(48px, 9vw, 96px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin: 0;
+}
+
+.pr-sottotitolo {
+    font-size: clamp(21px, 3vw, 28px);
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 12px 0 0;
+}
+
+.pr-link-azioni {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin: 28px 0 0;
+    font-size: 17px;
+}
+
+/* i link "Scopri…" con la freccetta ">" disegnata in CSS */
+.pr-link::after {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-left: 6px;
+    border-right: solid 1.5px currentColor;
+    border-top: solid 1.5px currentColor;
+    transform: translateY(-1px) rotate(45deg);
+}
+
+.pr .pr-bottone {
+    display: inline-block;
+    background: var(--pr-accento);
+    color: var(--pr-bianco);
+    font-size: 17px;
+    padding: 11px 22px;
+    border-radius: 999px;
+}
+
+.pr .pr-bottone:hover {
+    background: #0077ed;
+    text-decoration: none;
+}
+
+.pr-scatto-eroe {
+    max-width: 1200px;
+    margin: 32px auto 0;
+}
+
+/* ===== le "foto": rendering del modello 3D ===== */
+/* finché il rendering non è pronto c'è solo il fondo; quando arriva l'immagine compare sfumando */
+.pr-scatto {
+    display: block;
+    width: 100%;
+    height: auto;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+.pr-scatto.pronto {
+    opacity: 1;
+}
+
+
+/* ===== la frase grande ===== */
+.pr-frase {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 120px 22px;
+    text-align: center;
+}
+
+.pr-frase p {
+    font-size: clamp(32px, 5.5vw, 56px);
+    font-weight: 700;
+    line-height: 1.07;
+    letter-spacing: -0.005em;
+    margin: 0;
+}
+
+
+/* ===== le sezioni ===== */
+.pr-sezione {
+    padding: 100px 22px;
+}
+
+.pr-sezione > * {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pr-chiaro {
+    background: var(--pr-chiaro);
+}
+
+.pr-scuro {
+    background: var(--pr-scuro);
+    color: #f5f5f7;
+}
+
+.pr-scuro a {
+    color: var(--pr-accento-scuro);
+}
+
+.pr-titolo-sezione {
+    font-size: clamp(40px, 6vw, 64px);
+    font-weight: 700;
+    line-height: 1.06;
+    letter-spacing: -0.009em;
+    margin-top: 0;
+    margin-bottom: 48px;
+}
+
+.pr-testo-largo {
+    font-size: clamp(19px, 2.2vw, 24px);
+    line-height: 1.35;
+    color: #a1a1a6;
+    max-width: 700px;
+    margin-top: -24px;
+    margin-bottom: 48px;
+}
+
+
+/* ===== i riquadri del design: due per riga, quelli "larghi" occupano tutta la riga ===== */
+.pr-griglia {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.pr-riquadro {
+    background: var(--pr-chiaro);
+    border-radius: 28px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.pr-riquadro-largo {
+    grid-column: 1 / -1;
+}
+
+.pr-riquadro.pr-scuro {
+    background: var(--pr-scuro);
+}
+
+.pr-riquadro-testo {
+    padding: 40px 40px 0;
+}
+
+.pr-riquadro h3 {
+    font-size: clamp(28px, 3.4vw, 40px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.005em;
+    margin: 0 0 12px;
+}
+
+.pr-riquadro-testo p:last-child {
+    font-size: 17px;
+    color: var(--pr-grigio);
+    margin: 0;
+    max-width: 520px;
+}
+
+.pr-scuro .pr-riquadro-testo p:last-child {
+    color: #a1a1a6;
+}
+
+/* nei riquadri la foto sta in fondo, attaccata al bordo */
+.pr-riquadro .pr-scatto {
+    margin-top: auto;
+}
+
+/* nella sezione Design la griglia occupa tutta la larghezza dello schermo:
+   il riquadro nero "Scomponi" va da bordo a bordo, i tre riquadri sotto stanno affiancati
+   e si dividono la riga in parti uguali, con un margine sottile ai lati */
+.pr-sezione#design {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.pr-sezione#design .pr-titolo-sezione {
+    padding: 0 22px;
+}
+
+.pr-sezione#design .pr-griglia {
+    max-width: none;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 0 12px;
+}
+
+/* ===== i "binari": scorrere comanda un'animazione (js/visore3d.js, sezioni 14 e 14b) =====
+   Un binario è più alto di quello che contiene: il contenuto è "sticky", cioè resta fermo sullo schermo
+   mentre la pagina scorre lungo il binario, e lo script trasforma quello scorrimento in movimento.
+   Lo spazio in più è il ::after (la lunghezza dell'animazione) */
+.pr-binario {
+    position: relative;
+}
+
+.pr-binario::after {
+    content: "";
+    display: block;
+}
+
+/* il riquadro nero: allargato fino ai bordi (annullo il margine della griglia), occupa tutta la riga */
+.pr-sezione#design .pr-esploso-binario {
+    grid-column: 1 / -1;
+    margin: 0 -12px;
+}
+
+.pr-esploso-binario::after {
+    height: 150vh;    /* quanto si scorre per scomporlo tutto */
+}
+
+/* alto quanto lo schermo sotto la barra di navigazione: si ferma quando lo riempie tutto */
+.pr-sezione#design .pr-riquadro-largo {
+    position: sticky;
+    top: 52px;
+    height: calc(100vh - 52px);
+    border-radius: 0;
+}
+
+@supports (height: 100svh) {
+    .pr-sezione#design .pr-riquadro-largo {
+        height: calc(100svh - 52px);
+    }
+}
+
+/* il testo del riquadro nero resta allineato con il titolo della sezione */
+.pr-sezione#design .pr-riquadro-largo .pr-riquadro-testo {
+    padding: 48px max(22px, calc((100vw - 1000px) / 2)) 0;
+}
+
+/* l'esploso prende tutto lo spazio che resta sotto il testo */
+.pr-sezione#design .pr-riquadro-largo .pr-esploso {
+    flex: 1;
+    min-height: 0;
+    aspect-ratio: auto;
+}
+
+/* l'apertura: si ferma quando il suo fondo tocca il fondo dello schermo
+   (il punto esatto, --fermo, lo calcola lo script in base all'altezza dello schermo) */
+.pr-eroe-binario::after {
+    height: 120vh;    /* quanto si scorre per un giro completo */
+}
+
+.pr-eroe-binario > .pr-eroe {
+    position: sticky;
+    top: var(--fermo, 52px);
+}
+
+/* la foto e, sopra, la tela con l'occhiale 3D che gira (compare quando è pronta) */
+.pr-eroe-vista {
+    position: relative;
+    max-width: 1200px;
+    margin: 32px auto 0;
+}
+
+.pr-eroe-vista .pr-scatto-eroe {
+    margin: 0;
+}
+
+.pr-eroe-tela {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+.pr-eroe-vista.dal-vivo .pr-eroe-tela {
+    opacity: 1;
+}
+
+.pr-eroe-vista.dal-vivo .pr-scatto-eroe {
+    visibility: hidden;
+}
+
+/* i tre riquadri affiancati: stessa altezza, il testo in alto e la foto quadrata in fondo */
+.pr-sezione#design .pr-riquadro:not(.pr-riquadro-largo) .pr-riquadro-testo {
+    padding: 36px 32px 0;
+}
+
+.pr-sezione#design .pr-riquadro:not(.pr-riquadro-largo) h3 {
+    font-size: clamp(24px, 2.4vw, 34px);
+}
+
+.pr-sezione#design .pr-riquadro:not(.pr-riquadro-largo) .pr-scatto {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+@media (max-width: 1023px) {
+    /* su tablet i tre riquadri non ci stanno: due per riga, il terzo prende tutta la riga */
+    .pr-sezione#design .pr-griglia {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .pr-sezione#design .pr-riquadro:last-child {
+        grid-column: 1 / -1;
+    }
+    .pr-sezione#design .pr-riquadro:last-child .pr-scatto {
+        aspect-ratio: 16 / 9;
+    }
+}
+
+@media (max-width: 833px) {
+    /* sul telefono: uno sotto l'altro */
+    .pr-sezione#design .pr-griglia {
+        grid-template-columns: 1fr;
+        padding: 0 8px;
+        gap: 8px;
+    }
+    .pr-sezione#design .pr-esploso-binario {
+        margin: 0 -8px;
+    }
+    .pr-sezione#design .pr-riquadro-largo .pr-riquadro-testo {
+        padding: 32px 22px 0;
+    }
+    .pr-sezione#design .pr-riquadro:last-child .pr-scatto {
+        aspect-ratio: 1 / 1;
+    }
+}
+
+
+/* ===== le tre versioni ===== */
+.pr-versioni {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.pr-versione {
+    margin: 0;
+    background: var(--pr-bianco);
+    border-radius: 28px;
+    overflow: hidden;
+}
+
+.pr-versione figcaption {
+    padding: 0 28px 28px;
+    font-size: 15px;
+    color: var(--pr-grigio);
+}
+
+.pr-versione strong {
+    display: block;
+    font-size: 24px;
+    color: var(--pr-testo);
+    margin: 10px 0 2px;
+}
+
+/* Gargoz: il pallino a pois, il motto e il prezzo */
+.pr-pallino-pois {
+    background: radial-gradient(#ff8fc8 30%, transparent 33%) 0 0 / 5px 5px, #8e9196;
+}
+
+.pr-gargoz-motto {
+    display: block;
+    margin-top: 8px;
+    font-style: italic;
+    color: #ff8fc8;
+    text-shadow: 0 0 4px rgba(255, 143, 200, 0.6);
+}
+
+.pr-gargoz-prezzo {
+    display: block;
+    margin-top: 12px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--pr-testo);
+}
+
+/* quattro versioni: due per riga sugli schermi medi */
+@media (max-width: 1100px) {
+    .pr-versioni {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.pr-pallini {
+    display: flex;
+    gap: 6px;
+}
+
+.pr-pallini i {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+
+/* ===== indossato ===== */
+.pr-indossa {
+    text-align: center;
+}
+
+.pr-indossa .pr-testo-largo {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pr-indossa .pr-scatto {
+    max-width: 1100px;
+    border-radius: 28px;
+}
+
+
+/* "Guardaci attraverso" dal vivo: gli strati uno sopra l'altro, sopra la foto (js/visore3d.js, sezione 12b) */
+.pr-attraverso {
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-radius: 28px;
+    overflow: hidden;
+}
+
+.pr-indossa .pr-attraverso .pr-scatto {
+    border-radius: 0;
+}
+
+.pr-attraverso-strati {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+.pr-attraverso.dal-vivo .pr-attraverso-strati {
+    opacity: 1;
+}
+
+.pr-attraverso-strati img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* la foresta riempie il riquadro come nella foto (tagliata allo stesso modo) ed è un po' più grande,
+   così quando si sposta non si vedono i bordi */
+.pr-attraverso-foresta {
+    object-fit: cover;
+    object-position: 50% 40%;
+    transform: scale(1.16);
+    will-change: transform;
+}
+
+/* la lente: moltiplica la foresta per il suo colore, come un vetro colorato */
+.pr-attraverso-tinta {
+    mix-blend-mode: multiply;
+}
+
+.pr-attraverso-velo {
+    opacity: 0.22;
+}
+
+/* un velo scuro ai bordi, come nella foto */
+.pr-attraverso-strati::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.45) 100%);
+    pointer-events: none;
+}
+
+.pr-attraverso-comandi {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px 20px;
+    margin: 20px auto 0;
+    font-size: 15px;
+    color: var(--pr-grigio);
+}
+
+.pr .pr-attraverso-testa {
+    font-size: 15px;
+    padding: 8px 18px;
+}
+
+.pr-attraverso-stato {
+    margin: 10px auto 0;
+    font-size: 14px;
+    color: var(--pr-grigio);
+}
+
+.pr-attraverso-stato[hidden] {
+    display: none;
+}
+
+/* il credito della foto della foresta, piccolo sotto l'immagine */
+.pr-credito {
+    margin: 14px auto 0;
+    font-size: 12px;
+    color: #6e6e73;
+}
+
+.pr-scuro .pr-credito a {
+    color: #a1a1a6;
+}
+
+/* ===== provali su di te: due schede affiancate, telefono e computer ===== */
+.pr-provali {
+    text-align: center;
+}
+
+.pr-provali .pr-testo-largo {
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--pr-grigio);
+}
+
+.pr-provali-scelte {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.pr-provali-scelta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 36px 40px;
+    background: var(--pr-bianco);
+    border-radius: 28px;
+}
+
+.pr-provali-icona {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 20px;
+    fill: none;
+    stroke: var(--pr-testo);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.pr-provali-scelta h3 {
+    font-size: clamp(24px, 2.6vw, 32px);
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0 0 10px;
+}
+
+.pr-provali-scelta p {
+    font-size: 17px;
+    color: var(--pr-grigio);
+    max-width: 380px;
+    margin: 0 0 28px;
+}
+
+/* il bottone sempre in fondo, così nelle due schede stanno alla stessa altezza */
+.pr-provali-scelta .pr-bottone {
+    margin-top: auto;
+}
+
+@media (max-width: 833px) {
+    .pr-provali-scelte {
+        grid-template-columns: 1fr;
+    }
+    .pr-provali-scelta {
+        padding: 36px 24px 32px;
+    }
+}
+
+
+/* ===== specifiche: righe con il nome a sinistra e il valore a destra ===== */
+.pr-specifiche {
+    margin-top: 0;
+    margin-bottom: 0;
+    border-top: solid 1px var(--pr-bordo);
+}
+
+.pr-specifiche div {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+    padding: 22px 0;
+    border-bottom: solid 1px var(--pr-bordo);
+}
+
+.pr-specifiche dt {
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.pr-specifiche dd {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.1;
+}
+
+.pr-specifiche small {
+    display: block;
+    margin-top: 6px;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--pr-grigio);
+}
+
+
+/* ===== l'invito finale ===== */
+.pr-finale {
+    background: var(--pr-chiaro);
+    text-align: center;
+    padding: 100px 22px 110px;
+    margin-bottom: 80px;   /* spazio prima del configuratore */
+}
+
+.pr-finale .pr-titolo-sezione {
+    margin-bottom: 28px;
+}
+
+
+/* ===== pagina di dettaglio: l'intestazione del modello ===== */
+.pr-dettaglio-testa {
+    max-width: 1000px;
+    margin: 0 auto 56px;
+    padding: 48px 22px 0;
+}
+
+/* "Tutti gli occhiali" con la freccetta "<" disegnata in CSS */
+.pr .pr-indietro {
+    display: inline-block;
+    font-size: 15px;
+    margin-bottom: 28px;
+}
+
+.pr-indietro::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-right: 8px;
+    border-left: solid 1.5px currentColor;
+    border-bottom: solid 1.5px currentColor;
+    transform: translateY(-1px) rotate(45deg);
+}
+
+.pr-dettaglio-testa .pr-sottotitolo {
+    color: var(--pr-grigio);
+}
+
+/* precedente / successivo */
+.pr-scorri {
+    display: flex;
+    gap: 28px;
+    margin: 28px 0 0;
+    font-size: 17px;
+}
+
+.pr-scorri-prima::before,
+.pr-scorri-dopo::after {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-top: solid 1.5px currentColor;
+    transform: translateY(-1px) rotate(45deg);
+}
+
+.pr-scorri-prima::before {
+    margin-right: 8px;
+    border-left: solid 1.5px currentColor;
+    transform: translateY(-1px) rotate(-45deg);
+}
+
+.pr-scorri-dopo::after {
+    margin-left: 8px;
+    border-right: solid 1.5px currentColor;
+}
+
+/* nella pagina di dettaglio le specifiche sono una sezione a sé, con spazio sopra e sotto */
+.pr-sezione#specifiche {
+    margin-top: 40px;
+}
+
+
+/* ===== Provalo su di te: il bottone e la finestra della fotocamera ===== */
+/* sotto Personalizzazione, nel pannello: largo quanto il pannello */
+.pr-prova-apri {
+    margin: 24px 0 0;
+}
+
+.pr-prova-apri .pr-bottone {
+    width: 100%;
+}
+
+/* i bottoni veri (<button>) con l'aspetto di .pr-bottone */
+.pr button.pr-bottone {
+    border: none;
+    font: inherit;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.prova {
+    width: min(920px, calc(100vw - 32px));
+    max-height: calc(100vh - 32px);
+    padding: 40px;
+    border: none;
+    border-radius: 28px;
+    background: var(--pr-bianco);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    overflow: auto;
+}
+
+/* il fondo della pagina dietro la finestra: scuro e sfocato */
+.prova::backdrop {
+    background: rgba(0, 0, 0, 0.55);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+}
+
+.prova h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0 0 16px;
+}
+
+.prova p,
+.prova li {
+    font-size: 17px;
+    color: var(--pr-grigio);
+}
+
+.prova ul {
+    padding-left: 20px;
+    margin: 0 0 8px;
+}
+
+.prova-bottoni {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin: 28px 0 0;
+}
+
+/* i bottoni secondari (Annulla, Chiudi): solo testo blu */
+.prova-annulla,
+.prova-chiudi {
+    background: none;
+    border: none;
+    padding: 11px 0;
+    font: inherit;
+    font-size: 17px;
+    color: var(--pr-accento);
+    cursor: pointer;
+}
+
+.prova-annulla:hover,
+.prova-chiudi:hover {
+    text-decoration: underline;
+}
+
+/* il video e l'occhiale, uno sopra l'altro, specchiati insieme (come quando ti guardi allo specchio) */
+.prova-specchio {
+    position: relative;
+    width: 100%;
+    max-height: 65vh;
+    aspect-ratio: 16 / 9;   /* poi js/visore3d.js mette le proporzioni vere del video */
+    margin: 0 auto;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #1d1d1f;
+    transform: scaleX(-1);
+}
+
+.prova-video,
+.prova-occhiale {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.prova-stato {
+    margin: 16px 0 0;
+    text-align: center;
+}
+
+.prova-stato[hidden] {
+    display: none;
+}
+
+/* il passo "telefono": il codice QR a sinistra, le spiegazioni a destra */
+.prova-qr-righe {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 28px;
+    align-items: start;
+}
+
+.prova-qr {
+    width: 220px;
+    aspect-ratio: 1 / 1;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 16px;
+    background: var(--pr-bianco);
+    box-shadow: inset 0 0 0 1px var(--pr-bordo);
+}
+
+.prova-qr svg,
+.prova-qr img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.prova-qr-righe p {
+    margin: 0 0 14px;
+}
+
+.prova p.prova-qr-link {
+    font-size: 14px;
+    word-break: break-all;
+}
+
+.prova p.prova-qr-avviso {
+    font-size: 15px;
+    color: #8a4b00;
+    background: #fff4e5;
+    padding: 12px 14px;
+    border-radius: 12px;
+}
+
+.prova p.prova-qr-mac {
+    font-size: 15px;
+}
+
+.prova-qr-passo[hidden],
+.prova-qr-avviso[hidden],
+.prova-scegli[hidden] {
+    display: none;
+}
+
+/* la scelta della fotocamera, accanto a "Chiudi" */
+.prova-scegli {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    color: var(--pr-grigio);
+}
+
+.prova-fotocamere {
+    font: inherit;
+    font-size: 15px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    border: solid 1px var(--pr-bordo);
+    background: var(--pr-bianco);
+    color: var(--pr-testo);
+    max-width: 260px;
+}
+
+@media (max-width: 575px) {
+    .prova-qr-righe {
+        grid-template-columns: 1fr;
+    }
+    .prova-qr {
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 575px) {
+    .prova {
+        padding: 24px;
+    }
+}
+
+
+/* ===== comparsa durante lo scorrimento (la attiva js/presentazione.js) ===== */
+/* senza JavaScript tutto resta visibile: la classe "pr-animazioni" la aggiunge lo script */
+.pr-animazioni .pr-rivela {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.pr-animazioni .pr-rivela.visibile {
+    opacity: 1;
+    transform: none;
+}
+
+/* con GSAP (js/animazioni.js): finché la libreria non è pronta i blocchi restano nascosti */
+.pr-gsap-attesa .pr-rivela {
+    visibility: hidden;
+}
+
+/* la linea verde in alto che si riempie scorrendo la pagina */
+.pr-avanzamento {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    z-index: 1000;
+    background: var(--verde, #39ff6a);
+    box-shadow: 0 0 8px var(--verde, #39ff6a), 0 0 18px rgba(57, 255, 106, 0.5);
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    pointer-events: none;
+}
+
+/* "Orbita" si gira lettera per lettera: serve la prospettiva */
+.pr-eroe .pr-titolo {
+    perspective: 600px;
+}
+
+/* chi ha chiesto al sistema meno movimento non vede le animazioni */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    .pr-animazioni .pr-rivela {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
+
+/* ===== tablet e telefono ===== */
+@media (max-width: 833px) {
+    /* la navigazione diventa una tendina che si apre con "Menu" */
+    .pr-nav-menu {
+        display: block;
+    }
+    .pr-nav-link {
+        display: none;
+        position: absolute;
+        top: 52px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        padding: 8px 22px 20px;
+        background: rgba(251, 251, 253, 0.97);
+        border-bottom: solid 1px rgba(0, 0, 0, 0.08);
+    }
+    .pr-nav.aperta .pr-nav-link {
+        display: flex;
+    }
+    .pr .pr-nav-link a {
+        display: block;
+        font-size: 17px;
+        padding: 10px 0;
+    }
+    .pr-nav-dentro {
+        gap: 16px;
+    }
+
+    .pr-griglia,
+    .pr-versioni {
+        grid-template-columns: 1fr;
+    }
+    .pr-riquadro-testo {
+        padding: 32px 28px 0;
+    }
+    .pr-sezione {
+        padding: 72px 16px;
+    }
+    .pr-frase {
+        padding: 88px 16px;
+    }
+    .pr-specifiche div {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+}
+
+
+/* ===== il negozio (js/carrello.js) ===== */
+
+/* il tasto "Carrello" nella barra in alto, con il pallino del numero */
+.pr-nav-carrello {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    padding: 4px 0;
+    font: inherit;
+    font-size: 12px;
+    color: var(--pr-testo);
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.pr-nav-carrello:hover {
+    opacity: 1;
+}
+
+.pr-nav-conteggio {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--pr-testo);
+    color: var(--pr-bianco);
+    font-size: 11px;
+    line-height: 18px;
+    text-align: center;
+}
+
+.pr-nav-conteggio[hidden] {
+    display: none;
+}
+
+/* nel pannello: il prezzo sotto il nome e il tasto in fondo */
+.pannello-prezzo {
+    font-size: 21px;
+    font-weight: 600;
+    margin: -4px 0 12px;
+}
+
+.pannello-acquisto {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: solid 1px #e5e0d6;
+}
+
+.pannello-acquisto .pr-bottone {
+    width: 100%;
+}
+
+.pannello-nota {
+    margin: 10px 0 0;
+    font-size: 13px;
+    color: var(--pr-grigio);
+    text-align: center;
+}
+
+/* il carrello: una colonna che entra da destra, sopra la pagina scurita */
+.carrello {
+    margin: 0 0 0 auto;
+    width: min(440px, 100vw);
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    padding: 0;
+    border: none;
+    background: var(--pr-bianco);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.15);
+    overflow: auto;
+}
+
+.carrello[open] {
+    animation: carrello-entra 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@keyframes carrello-entra {
+    from { transform: translateX(100%); }
+    to   { transform: none; }
+}
+
+.carrello::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.carrello-dentro {
+    min-height: 100%;
+    padding: 28px;
+    box-sizing: border-box;
+}
+
+.carrello-testa {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.carrello h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.carrello h3 {
+    font-size: 21px;
+    margin: 0 0 16px;
+}
+
+.carrello-chiudi,
+.carrello-indietro,
+.carrello-togli {
+    background: none;
+    border: none;
+    font: inherit;
+    color: var(--pr-accento);
+    cursor: pointer;
+    padding: 4px 0;
+}
+
+.carrello-chiudi {
+    font-size: 15px;
+}
+
+.carrello-indietro {
+    display: block;
+    margin: 14px auto 0;
+    font-size: 15px;
+}
+
+.carrello-righe,
+.carrello-riepilogo {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* una riga: testo a sinistra, prezzo a destra, quantità sotto */
+.carrello-riga {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px 16px;
+    padding: 18px 0;
+    border-top: solid 1px var(--pr-bordo);
+}
+
+.carrello-riga-testo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 14px;
+    color: var(--pr-grigio);
+}
+
+.carrello-riga-testo strong {
+    font-size: 17px;
+    color: var(--pr-testo);
+}
+
+.carrello-riga-colori {
+    font-size: 12px;
+}
+
+.carrello-riga-prezzo {
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.carrello-quantita {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.carrello-quantita button:not(.carrello-togli) {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: solid 1px var(--pr-bordo);
+    background: var(--pr-bianco);
+    font: inherit;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.carrello-quantita button:not(.carrello-togli):hover {
+    border-color: var(--pr-testo);
+}
+
+.carrello-togli {
+    margin-left: auto;
+    font-size: 14px;
+}
+
+.carrello-vuoto {
+    color: var(--pr-grigio);
+    padding: 24px 0;
+}
+
+.carrello-vuoto[hidden],
+.carrello-conti[hidden],
+.carrello-passo[hidden] {
+    display: none;
+}
+
+/* i conti: righe con il nome a sinistra e la cifra a destra */
+.carrello-conti {
+    border-top: solid 1px var(--pr-bordo);
+    padding-top: 16px;
+}
+
+.carrello-conti p,
+.carrello-riepilogo li,
+.carrello-passo > .carrello-totale {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0 0 8px;
+    font-size: 15px;
+}
+
+.carrello-riepilogo li {
+    padding: 10px 0;
+    border-bottom: solid 1px var(--pr-bordo);
+    margin: 0;
+}
+
+.carrello-totale {
+    font-size: 19px !important;
+    font-weight: 700;
+    margin-top: 12px !important;
+}
+
+.carrello .pr-bottone {
+    width: 100%;
+    margin-top: 16px;
+}
+
+.carrello-avviso {
+    font-size: 13px;
+    color: var(--pr-grigio);
+    background: var(--pr-chiaro);
+    padding: 12px 14px;
+    border-radius: 12px;
+    margin: 16px 0 0;
+}
+
+
+/* ===== l'esploso dal vivo nel riquadro nero "Scomponi" (js/visore3d.js, sezione 14) ===== */
+.pr-esploso {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    margin-top: auto;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+.pr-esploso.pronto {
+    opacity: 1;
+}
+
+.pr-esploso-tela {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* le etichette: lo script le sposta sopra il loro pezzo (transform), qui le centro su quel punto */
+.pr-esploso-etichette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+/* ogni etichetta parte dal punto del pezzo (lo script la sposta lì con transform):
+   la pillola con il nome sta un po' sopra e a destra, il puntino proprio sul pezzo */
+.pr-esploso-etichetta {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    white-space: nowrap;
+    margin: -34px 0 0 14px;          /* la pillola: sopra e a destra del punto */
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: #f5f5f7;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* il puntino sul pezzo: torno indietro dello stesso spostamento della pillola */
+.pr-esploso-etichetta::before {
+    content: "";
+    position: absolute;
+    left: -18px;
+    top: 30px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #f5f5f7;
+    box-shadow: 0 0 0 3px rgba(245, 245, 247, 0.25);
+}
+
+.pr-esploso-suggerimento {
+    position: absolute;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #f5f5f7;
+    font-size: 14px;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+
+/* =====================================================================
+   OCTULUS: il logo nella barra, la mascotte e l'acquisto in stile Apple
+   ===================================================================== */
+.pr .pr-nav-marchio {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pr-nav-logo {
+    width: 30px;
+    height: 30px;
+    filter: drop-shadow(0 0 4px rgba(57, 255, 106, 0.7));
+}
+
+.pr-mascotte {
+    display: block;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 24px;
+    filter: drop-shadow(0 0 10px rgba(57, 255, 106, 0.6));
+}
+
+/* --- il pannello: le personalizzazioni a pagamento sotto il prezzo --- */
+.pannello-extra {
+    list-style: none;
+    margin: 0 0 16px;
+    padding: 0;
+    font-size: 14px;
+}
+
+.pannello-extra[hidden] {
+    display: none;
+}
+
+.pannello-extra li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 0;
+}
+
+/* --- la finestra: un grande foglio al centro, come il checkout Apple --- */
+.carrello {
+    margin: auto;
+    width: min(1080px, calc(100vw - 32px));
+    height: min(92vh, 1000px);
+    max-height: 92vh;
+    border-radius: 24px;
+}
+
+.carrello[open] {
+    animation: carrello-sale 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes carrello-sale {
+    from { transform: translateY(40px) scale(0.98); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+}
+
+.carrello::backdrop {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.carrello-dentro {
+    padding: 28px clamp(20px, 5vw, 64px) 56px;
+}
+
+.carrello-testa {
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.carrello-marchio {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 19px;
+    font-weight: 600;
+}
+
+/* le tappe: Borsa · Lenti · Consegna · Pagamento */
+.carrello-tappe {
+    display: flex;
+    gap: 6px;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    counter-reset: tappa;
+}
+
+.carrello-tappe[hidden] {
+    display: none;
+}
+
+.carrello-tappe li {
+    counter-increment: tappa;
+    padding: 6px 12px;
+    border-radius: 999px;
+    opacity: 0.5;
+}
+
+.carrello-tappe li::before {
+    content: counter(tappa) "  ";
+}
+
+.carrello-tappe li.fatta {
+    opacity: 0.8;
+}
+
+.carrello-tappe li.fatta::before {
+    content: "✓  ";
+}
+
+.carrello-tappe li.attuale {
+    opacity: 1;
+    outline: solid 1px currentColor;
+    box-shadow: 0 0 10px rgba(57, 255, 106, 0.45);
+}
+
+/* i titoli grandi e il testo sotto */
+.carrello .carrello-grande {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    margin: 0 0 10px;
+}
+
+.carrello-sotto {
+    font-size: 17px;
+    margin: 0 0 28px;
+    opacity: 0.8;
+}
+
+.carrello .pr-bottone {
+    width: auto;
+    min-width: 240px;
+    padding: 14px 28px;
+    font-size: 17px;
+    border-radius: 12px;
+}
+
+.carrello-in-alto[hidden] {
+    display: none;
+}
+
+/* --- la borsa --- */
+.carrello-righe {
+    margin: 40px 0 0;
+}
+
+.carrello-riga {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    gap: 28px;
+    padding: 36px 0;
+    align-items: start;
+}
+
+.carrello-riga-icona {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    border-radius: 18px;
+    outline: solid 1px rgba(57, 255, 106, 0.4);
+}
+
+.carrello-riga-icona .pr-pallini {
+    display: grid;
+    grid-template-columns: repeat(3, 18px);
+    gap: 6px;
+}
+
+.carrello-riga-icona .pr-pallini i {
+    width: 18px;
+    height: 18px;
+}
+
+.carrello-riga-testo strong {
+    font-size: 24px;
+}
+
+.carrello-riga-dettaglio {
+    margin-top: 16px;
+    font-size: 14px;
+    max-width: 440px;
+}
+
+.carrello-riga-dettaglio p,
+.carrello-riepilogo p,
+.carrello-conti p {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 4px 0;
+}
+
+.carrello-riga-destra {
+    display: grid;
+    justify-items: end;
+    gap: 10px;
+}
+
+.carrello-riga-prezzo {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+select.carrello-quantita {
+    font: inherit;
+    font-size: 17px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+}
+
+.carrello-conti {
+    margin-left: auto;
+    max-width: 480px;
+    padding-top: 24px;
+    font-size: 17px;
+}
+
+.carrello-conti .pr-bottone {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.carrello .carrello-totale {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 14px;
+}
+
+.carrello-rate {
+    font-size: 13px;
+    opacity: 0.75;
+}
+
+/* --- i passi con il riepilogo a destra --- */
+.carrello-con-riepilogo:not([hidden]) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 48px;
+    align-items: start;
+}
+
+.carrello-riepilogo {
+    position: sticky;
+    top: 0;
+    padding: 24px;
+    border-radius: 18px;
+    font-size: 14px;
+}
+
+.carrello-riepilogo h3 {
+    font-size: 19px;
+    margin: 0 0 14px;
+}
+
+.carrello-separa {
+    margin-top: 14px !important;
+    padding-top: 14px;
+    border-top: solid 1px rgba(57, 255, 106, 0.3);
+}
+
+/* le tessere: dei radio grandi e arrotondati */
+.carrello-tessere {
+    border: none;
+    margin: 0 0 28px;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+}
+
+.carrello-tessere legend {
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.carrello-tessera {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 18px 20px;
+    border-radius: 14px;
+    outline: solid 1px rgba(57, 255, 106, 0.35);
+    cursor: pointer;
+    transition: outline-color 0.2s, box-shadow 0.2s;
+}
+
+.carrello-tessera:hover {
+    outline-color: rgba(57, 255, 106, 0.8);
+}
+
+.carrello-tessera:has(input:checked) {
+    outline: solid 2px #39ff6a;
+    box-shadow: 0 0 14px rgba(57, 255, 106, 0.45);
+}
+
+.carrello-tessera input {
+    accent-color: #39ff6a;
+    width: 18px;
+    height: 18px;
+}
+
+.carrello-tessera strong {
+    display: block;
+    font-size: 17px;
+}
+
+.carrello-tessera small {
+    font-size: 14px;
+    opacity: 0.75;
+}
+
+.carrello-tessera-prezzo {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* il modulo della consegna */
+.carrello-campi {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 28px;
+}
+
+.carrello-campi label {
+    display: grid;
+    gap: 6px;
+    font-size: 13px;
+}
+
+.carrello-campi .largo {
+    grid-column: 1 / -1;
+}
+
+.carrello-campi input {
+    font: inherit;
+    font-size: 17px;
+    padding: 14px 16px;
+    border-radius: 12px;
+}
+
+.carrello-campi input:focus {
+    outline: solid 2px #39ff6a;
+    box-shadow: 0 0 10px rgba(57, 255, 106, 0.5);
+}
+
+.carrello-bottoni {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.carrello-grazie {
+    text-align: center;
+    max-width: 620px;
+    margin: 40px auto 0;
+}
+
+.carrello-grazie img {
+    filter: drop-shadow(0 0 10px rgba(57, 255, 106, 0.6));
+    margin-bottom: 20px;
+}
+
+@media (max-width: 833px) {
+    .carrello {
+        width: 100vw;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+    .carrello-tappe {
+        display: none;
+    }
+    .carrello-riga {
+        grid-template-columns: 72px 1fr;
+        gap: 16px;
+    }
+    .carrello-riga-destra {
+        grid-column: 2;
+        justify-items: start;
+    }
+    .carrello-con-riepilogo:not([hidden]) {
+        grid-template-columns: 1fr;
+    }
+    .carrello-riepilogo {
+        position: static;
+    }
+    .carrello-campi {
+        grid-template-columns: 1fr;
+    }
+    .carrello .pr-bottone {
+        width: 100%;
+    }
+}
+
+/* --- il tasto Carrello nella barra: la sagoma del carrello, il nome e il numero --- */
+.pr-nav-carrello {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pr-nav-carrello-icona {
+    filter: drop-shadow(0 0 3px rgba(57, 255, 106, 0.7));
+}
+
+@media (max-width: 833px) {
+    .pr-nav-carrello-testo {
+        display: none;   /* sul telefono basta la sagoma */
+    }
+}
+
+/* --- nel carrello: la foto dell'occhiale e, sotto, i pallini dei colori scelti --- */
+.carrello-riga {
+    grid-template-columns: 220px 1fr auto;
+}
+
+.carrello-riga-icona.con-foto {
+    aspect-ratio: auto;
+    gap: 10px;
+    padding-bottom: 12px;
+    overflow: hidden;
+}
+
+.carrello-riga-icona img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 18px 18px 0 0;
+}
+
+.carrello-riga-icona.con-foto .pr-pallini {
+    display: flex;
+    grid-template-columns: none;
+}
+
+.carrello-riga-icona.con-foto .pr-pallini i {
+    width: 12px;
+    height: 12px;
+}
+
+@media (max-width: 833px) {
+    .carrello-riga {
+        grid-template-columns: 110px 1fr;
+    }
+}

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Converti 3DM in GLB</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; background: #f3efe8; color: #1e1e1e; }
+    h1 { font-size: 22px; }
+    label { display: block; margin: 16px 0 6px; font-weight: bold; }
+    select, button { font: inherit; padding: 8px 14px; }
+    button { background: #1e1e1e; color: #fff; border: none; border-radius: 999px; cursor: pointer; margin-top: 20px; }
+    button:disabled { opacity: 0.4; cursor: default; }
+    pre { background: #fff; padding: 12px; border-radius: 4px; white-space: pre-wrap; font-size: 13px; }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Converti models/occhiale.3dm in GLB</h1>
+  <p>Strumento di servizio, non fa parte del sito. Legge il file di Rhino, tiene solo le superfici (mesh), toglie curve e punti, unisce i vertici doppi e scarica un .glb leggero.</p>
+
+  <label for="unita">Unità del file Rhino</label>
+  <select id="unita">
+    <option value="auto" selected>Automatico (dalle impostazioni del file)</option>
+    <option value="0.001">Millimetri</option>
+    <option value="0.01">Centimetri</option>
+    <option value="1">Metri</option>
+  </select>
+
+  <pre id="stato">Carico il file…</pre>
+  <button id="scarica" disabled>Scarica occhiale.glb</button>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { Rhino3dmLoader } from 'three/addons/loaders/3DMLoader.js';
+    import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+    import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
+
+    const stato = document.querySelector('#stato');
+    const bottone = document.querySelector('#scarica');
+    const sceltaUnita = document.querySelector('#unita');
+    function scrivi(testo) { stato.textContent += '\n' + testo; }
+
+    // rhino3dm: la libreria ufficiale di McNeel che legge i .3dm senza Rhino (WebAssembly)
+    const caricatore = new Rhino3dmLoader();
+    caricatore.setLibraryPath('https://cdn.jsdelivr.net/npm/rhino3dm@8.4.0/');
+
+    // da unità Rhino (UnitSystem) a metri
+    const unitaRhino = { 2: 0.001, 3: 0.01, 4: 1, 8: 0.0254, 9: 0.3048 };
+
+    let modello;
+    try {
+      modello = await caricatore.loadAsync('../models/occhiale.3dm');
+    } catch (errore) {
+      scrivi('Errore nel caricamento: ' + errore.message);
+      throw errore;
+    }
+
+    // tengo solo le mesh: curve, punti e testi non servono sul web
+    const daTogliere = [];
+    let mesh = 0, triangoliPrima = 0, triangoliDopo = 0;
+    modello.traverse(function (oggetto) {
+      if (oggetto.isLine || oggetto.isPoints || oggetto.isSprite) {
+        daTogliere.push(oggetto);
+      } else if (oggetto.isMesh) {
+        mesh++;
+        const g = oggetto.geometry;
+        triangoliPrima += (g.index ? g.index.count : g.attributes.position.count) / 3;
+        // unisco i vertici doppi (Rhino li duplica ai bordi delle facce): file molto più leggero
+        g.deleteAttribute('uv');   // le texture non ci sono: le coordinate uv sono peso inutile
+        const nuova = mergeVertices(g, 1e-4);
+        nuova.computeVertexNormals();
+        oggetto.geometry = nuova;
+        triangoliDopo += nuova.index.count / 3;
+      }
+    });
+    daTogliere.forEach(function (o) { o.removeFromParent(); });
+
+    scrivi('Mesh trovate: ' + mesh + ' · triangoli: ' + Math.round(triangoliDopo));
+    if (mesh === 0) {
+      scrivi('Nessuna mesh: il file non contiene le mesh di rendering. In Rhino servirebbe salvarlo con "Salva piccolo" disattivato.');
+    }
+    if (daTogliere.length) {
+      scrivi('Tolti ' + daTogliere.length + ' oggetti non superficie (curve/punti).');
+    }
+
+    const unitaFile = modello.userData?.settings?.modelUnitSystem?.value;
+    scrivi('Unità nelle impostazioni del file: ' + (unitaFile in unitaRhino ? unitaRhino[unitaFile] + ' m per unità' : 'non trovate (scegli a mano)'));
+
+    function preparaEScarica() {
+      const scala = sceltaUnita.value === 'auto' ? (unitaRhino[unitaFile] || 0.001) : Number(sceltaUnita.value);
+      const radice = new THREE.Group();
+      radice.add(modello);
+      // Rhino ha l'asse Z verso l'alto, il glTF l'asse Y: giro il modello
+      radice.rotation.x = -Math.PI / 2;
+      radice.scale.setScalar(scala);
+
+      const scatola = new THREE.Box3().setFromObject(radice);
+      const misura = scatola.getSize(new THREE.Vector3());
+      scrivi('Dimensioni finali: ' + misura.toArray().map(v => (v * 100).toFixed(1)).join(' × ') + ' cm');
+
+      new GLTFExporter().parse(radice, function (glb) {
+        const blob = new Blob([glb], { type: 'model/gltf-binary' });
+        scrivi('GLB pronto: ' + (blob.size / 1024 / 1024).toFixed(2) + ' MB');
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'occhiale.glb';
+        link.click();
+        radice.remove(modello);   // così si può riscaricare con un'altra unità
+      }, function (errore) {
+        scrivi('Errore nell\'esportazione: ' + errore.message);
+      }, { binary: true });
+    }
+
+    bottone.disabled = mesh === 0;
+    bottone.addEventListener('click', preparaEScarica);
+  </script>
+</body>
+</html>

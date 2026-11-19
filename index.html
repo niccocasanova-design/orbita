@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orbita – Octulus</title>
+  <link rel="icon" href="img/octulus.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/bootstrap-grid.css">
+  <link rel="stylesheet" href="css/stile_esercizio4.css">
+  <link rel="stylesheet" href="css/configuratore.css">
+  <link rel="stylesheet" href="css/presentazione.css">
+  <!-- il tema nero con le scritte verdi luminose: per ultimo, perché sovrascrive i colori -->
+  <link rel="stylesheet" href="css/tema-verde.css">
+  <!-- mentre arriva GSAP i blocchi animati restano nascosti, così non si vedono "saltare" (js/animazioni.js) -->
+  <script>document.documentElement.classList.add("pr-gsap-attesa");</script>
+
+  <!-- Three.js da CDN: "three" è la libreria, "three/addons/" sono gli strumenti extra (controlli, loader...) -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <!-- ===== qui inizia la presentazione dell'occhiale (stile pagina prodotto) ===== -->
+  <!-- Le "foto" (img.pr-scatto) sono rendering del mio modello 3D, disegnati da js/visore3d.js
+       quando si apre la pagina: data-scatto dice quale inquadratura usare -->
+  <!-- la barra di navigazione: resta in alto in tutta la pagina (per questo sta fuori da .pr, direttamente nel body) -->
+  <nav class="pr pr-nav" aria-label="Navigazione della pagina">
+    <div class="pr-nav-dentro">
+      <a class="pr-nav-marchio" href="#panoramica"><img class="pr-nav-logo" src="img/octulus.svg" alt="" width="34" height="34">Octulus</a>
+      <button type="button" class="pr-nav-menu" aria-expanded="false" aria-controls="pr-nav-link">Menu</button>
+      <ul class="pr-nav-link" id="pr-nav-link">
+        <li><a href="#panoramica">Panoramica</a></li>
+        <li><a href="#design">Design</a></li>
+        <li><a href="#colori">Colori</a></li>
+        <li><a href="#indossalo">Indossalo</a></li>
+        <li><a href="#provali">Provali</a></li>
+        <li><a href="#specifiche">Specifiche</a></li>
+      </ul>
+      <a class="pr-nav-azione" href="#configura">Configura</a>
+    </div>
+  </nav>
+
+  <div class="pr">
+
+    <!-- l'apertura: titolo grande e l'occhiale. Il "binario" è più alto dell'apertura: quando il fondo
+         del riquadro grigio arriva in fondo allo schermo, l'apertura resta ferma e scorrendo l'occhiale
+         fa un giro completo; finito il giro la pagina riprende a scorrere (js/visore3d.js, sezione 14b) -->
+    <div class="pr-binario pr-eroe-binario">
+    <header class="pr-eroe" id="panoramica">
+      <p class="pr-sovratitolo pr-rivela">Nuovo da Octulus</p>
+      <h1 class="pr-titolo pr-rivela">Orbita</h1>
+      <p class="pr-sottotitolo pr-rivela">Disegnato in Rhino.<br>Da guardare da ogni lato.</p>
+      <p class="pr-link-azioni pr-rivela">
+        <a class="pr-bottone" href="#configura">Configuralo</a>
+        <a class="pr-link" href="#design">Scopri il design</a>
+      </p>
+      <!-- la foto resta finché l'occhiale 3D dal vivo (la tela sopra) non è pronto -->
+      <div class="pr-eroe-vista pr-rivela">
+        <img class="pr-scatto pr-scatto-eroe" data-scatto="eroe" width="1600" height="900"
+             src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+             alt="Orbita vista di tre quarti, con la montatura rosso avorio">
+        <canvas class="pr-eroe-tela" aria-hidden="true"></canvas>
+      </div>
+    </header>
+    </div>
+
+    <!-- una frase grande, al centro -->
+    <section class="pr-frase">
+      <p class="pr-rivela">Cinque pezzi. Cinque colori.<br><span class="pr-grigio">Una combinazione che è solo tua.</span></p>
+    </section>
+
+    <!-- il design, in riquadri di misure diverse -->
+    <section class="pr-sezione" id="design">
+      <h2 class="pr-titolo-sezione pr-rivela">Il design,<br>pezzo per pezzo.</h2>
+      <div class="pr-griglia">
+
+        <!-- l'esploso dal vivo: il riquadro nero è alto quanto lo schermo e sta in un "binario" più alto.
+             Quando il riquadro occupa tutto lo schermo resta fermo e scorrendo la pagina l'occhiale si scompone
+             (scorrendo indietro si ricompone); finito, la pagina riprende a scorrere (js/visore3d.js, sezione 14) -->
+        <div class="pr-binario pr-esploso-binario">
+        <article class="pr-riquadro pr-riquadro-largo pr-scuro">
+          <div class="pr-riquadro-testo">
+            <p class="pr-sovratitolo">Scomponi</p>
+            <h3>Ogni pezzo,<br>al suo posto.</h3>
+            <p>Continua a scorrere: verso il basso l'occhiale si scompone, verso l'alto si ricompone. Per capire come è fatto, prima ancora di come appare.</p>
+          </div>
+          <div class="pr-esploso" role="img" aria-label="Orbita: scorrendo si scompone in lenti, stanghe, naselli e montatura">
+            <canvas class="pr-esploso-tela"></canvas>
+            <div class="pr-esploso-etichette" aria-hidden="true"></div>
+            <p class="pr-esploso-suggerimento" aria-hidden="true">Scorri per scomporlo</p>
+          </div>
+        </article>
+        </div>
+
+        <article class="pr-riquadro pr-scuro pr-rivela">
+          <div class="pr-riquadro-testo">
+            <p class="pr-sovratitolo">Lenti</p>
+            <h3>Il colore,<br>davanti agli occhi.</h3>
+            <p>Lenti leggermente trasparenti, in cinque tinte.</p>
+          </div>
+          <img class="pr-scatto" data-scatto="lenti" width="1000" height="1000"
+               src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+               alt="Primo piano di una lente e della montatura">
+        </article>
+
+        <article class="pr-riquadro pr-scuro pr-rivela">
+          <div class="pr-riquadro-testo">
+            <p class="pr-sovratitolo">Cerniere</p>
+            <h3>Si chiude<br>in un gesto.</h3>
+            <p>Le stanghe ruotano sulle loro cerniere e si ripiegano dietro il frontale.</p>
+          </div>
+          <img class="pr-scatto" data-scatto="chiuso" width="1000" height="1000"
+               src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+               alt="L'occhiale chiuso, visto dall'alto">
+        </article>
+
+        <article class="pr-riquadro pr-scuro pr-rivela">
+          <div class="pr-riquadro-testo">
+            <p class="pr-sovratitolo">Profilo</p>
+            <h3>Una linea sola,<br>dalla cerniera all'orecchio.</h3>
+            <p>Visto di lato, il frontale e la stanga disegnano un unico gesto.</p>
+          </div>
+          <img class="pr-scatto" data-scatto="profilo" width="1000" height="1000"
+               src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+               alt="L'occhiale visto di profilo">
+        </article>
+
+      </div>
+    </section>
+
+    <!-- le tre versioni -->
+    <section class="pr-sezione pr-chiaro" id="colori">
+      <h2 class="pr-titolo-sezione pr-rivela">Quattro versioni.<br><span class="pr-grigio">Oppure la tua.</span></h2>
+      <div class="pr-versioni">
+        <figure class="pr-versione pr-rivela">
+          <img class="pr-scatto" data-scatto="versione-vulcano" width="900" height="700"
+               src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+               alt="Versione Vulcano: montatura e stanghe rosso avorio, lenti grigio antracite">
+          <figcaption>
+            <span class="pr-pallini"><i style="background:#b5473a"></i><i style="background:#3a3d40"></i></span>
+            <strong>Vulcano</strong>
+            Rosso avorio, lenti grigio antracite.
+          </figcaption>
+        </figure>
+        <figure class="pr-versione pr-rivela">
+          <img class="pr-scatto" data-scatto="versione-aputa" width="900" height="700"
+               src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+               alt="Versione Aputa: montatura e stanghe azzurre, lenti beige">
+          <figcaption>
+            <span class="pr-pallini"><i style="background:#7fb3d5"></i><i style="background:#d9c7a7"></i></span>
+            <strong>Aputa</strong>
+            Azzurro, lenti beige.
+          </figcaption>
+        </figure>
+        <figure class="pr-versione pr-rivela">
+          <img class="pr-scatto" data-scatto="versione-ape" width="900" height="700"
+               src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+               alt="Versione Ape: montatura e stanghe giallo ocra, lenti grigio antracite">
+          <figcaption>
+            <span class="pr-pallini"><i style="background:#c99a2e"></i><i style="background:#3a3d40"></i></span>
+            <strong>Ape</strong>
+            Giallo ocra, lenti grigio antracite.
+          </figcaption>
+        </figure>
+        <!-- la versione speciale di Orbita: grigia a pois rosa, con un prezzo tutto suo (vedi js/modelli.js) -->
+        <figure class="pr-versione pr-versione-gargoz pr-rivela">
+          <img class="pr-scatto" data-scatto="versione-gargoz" width="900" height="700"
+               src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+               alt="Versione Gargoz: montatura e stanghe grigie a pois rosa, lenti grigio antracite">
+          <figcaption>
+            <span class="pr-pallini"><i class="pr-pallino-pois"></i><i style="background:#3a3d40"></i></span>
+            <strong>Gargoz</strong>
+            Grigio a pois rosa, lenti grigio antracite.
+            <span class="pr-gargoz-motto">Per essere un vero Gargoz.</span>
+            <span class="pr-gargoz-motto">Lo sai come fanno i cavalli?</span>
+            <span class="pr-gargoz-prezzo">999,99 €</span>
+          </figcaption>
+        </figure>
+      </div>
+      <p class="pr-centro pr-rivela"><a class="pr-link" href="#configura">Componi la tua nel configuratore</a></p>
+    </section>
+
+    <!-- la vista indossata, su fondo scuro -->
+    <section class="pr-sezione pr-scuro pr-indossa" id="indossalo">
+      <p class="pr-sovratitolo pr-rivela">Indossato</p>
+      <h2 class="pr-titolo-sezione pr-rivela">Guardaci attraverso.</h2>
+      <p class="pr-testo-largo pr-rivela">In modalità Indossato l'occhiale gira, si avvicina e si ferma davanti ai tuoi occhi. Vedi il mondo come lo vedresti tu, attraverso lenti del colore che hai scelto.</p>
+      <!-- la foto in prima persona: la montatura sfocata (è vicinissima agli occhi) e, attraverso la lente,
+           la foresta pluviale colorata dal vetro (vedi js/visore3d.js, sezione 12).
+           Quando è pronta, sopra la foto compaiono gli strati separati e la foresta segue la testa (sezione 12b) -->
+      <div class="pr-attraverso pr-rivela">
+        <img class="pr-scatto" data-scatto="indossa" width="1600" height="900"
+             src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+             alt="La vista in prima persona: la foresta pluviale vista attraverso la lente azzurra dell'occhiale indossato">
+        <div class="pr-attraverso-strati" aria-hidden="true">
+          <img class="pr-attraverso-foresta" src="img/foresta-pluviale.jpg" alt="">
+          <img class="pr-attraverso-tinta" alt="">
+          <img class="pr-attraverso-velo" alt="">
+          <img class="pr-attraverso-montatura" alt="">
+        </div>
+      </div>
+      <p class="pr-attraverso-comandi pr-rivela">
+        <span class="pr-attraverso-aiuto">Muovi il mouse per girare la testa, o inclina il telefono.</span>
+        <button type="button" class="pr-bottone pr-attraverso-testa" aria-pressed="false">Muovi la testa davvero</button>
+      </p>
+      <p class="pr-attraverso-stato" role="status" hidden></p>
+      <!-- la foto della foresta è di JosepMGracia, licenza CC BY-SA 4.0: va citata -->
+      <p class="pr-credito pr-rivela">Foresta: <a href="https://commons.wikimedia.org/wiki/File:Tropical_rainforest_in_Sangha_Trinational.jpg" target="_blank" rel="noopener">JosepMGracia</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.it" target="_blank" rel="noopener">CC BY-SA 4.0</a></p>
+    </section>
+
+    <!-- provali su di te: con la fotocamera del telefono o con quella del computer (js/visore3d.js, sezione 13) -->
+    <section class="pr-sezione pr-chiaro pr-provali" id="provali">
+      <p class="pr-sovratitolo pr-rivela">Prova virtuale</p>
+      <h2 class="pr-titolo-sezione pr-rivela">Provali su di te.</h2>
+      <p class="pr-testo-largo pr-rivela">L'occhiale si appoggia sul tuo viso e ti segue mentre giri la testa, con i colori che hai scelto. Le immagini restano sul tuo dispositivo.</p>
+      <div class="pr-provali-scelte">
+        <article class="pr-provali-scelta pr-rivela">
+          <svg class="pr-provali-icona" viewBox="0 0 48 48" aria-hidden="true"><rect x="14" y="4" width="20" height="40" rx="4"/><path d="M21 9h6"/><circle cx="24" cy="38" r="1.5"/></svg>
+          <h3>Con il telefono</h3>
+          <p>Inquadra un codice con il telefono e la prova si apre lì. Su Mac puoi anche usare l'iPhone come fotocamera.</p>
+          <button type="button" class="pr-bottone prova-telefono">Collega il telefono</button>
+        </article>
+        <article class="pr-provali-scelta pr-rivela">
+          <svg class="pr-provali-icona" viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="9" width="38" height="25" rx="3"/><path d="M2 39h44"/><circle cx="24" cy="13" r="1.5"/></svg>
+          <h3>Con il computer</h3>
+          <p>Accendi la webcam del computer e guardati come in uno specchio, con l'occhiale addosso.</p>
+          <button type="button" class="pr-bottone prova-apri">Attiva la fotocamera del PC</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- le specifiche: le misure le calcola js/visore3d.js dal file 3D -->
+    <section class="pr-sezione" id="specifiche">
+      <h2 class="pr-titolo-sezione pr-rivela">Specifiche.</h2>
+      <dl class="pr-specifiche pr-rivela">
+        <div><dt>Larghezza</dt><dd data-misura="larghezza">—</dd></div>
+        <div><dt>Profondità</dt><dd data-misura="profondita">—</dd></div>
+        <div><dt>Altezza</dt><dd data-misura="altezza">—</dd></div>
+        <div><dt>Pezzi personalizzabili</dt><dd>5<small>Lenti, stanga Dx, stanga Sx, nasello, montatura centrale</small></dd></div>
+        <div><dt>Colori</dt><dd>6<small>Grigio antracite, beige, rosso avorio, azzurro, giallo ocra, grigio a pois rosa</small></dd></div>
+        <div><dt>Versioni</dt><dd>4<small>Vulcano, Aputa, Ape, Gargoz</small></dd></div>
+        <div><dt>Modalità</dt><dd>4<small>Chiuso, aperto, indossato, scomposto</small></dd></div>
+        <div><dt>Viste</dt><dd>6<small>3D, frontale, da dietro, laterale Sx e Dx, dall'alto</small></dd></div>
+        <div><dt>Modello</dt><dd>Rhino 8<small>File .3dm, letto direttamente nel browser</small></dd></div>
+      </dl>
+    </section>
+
+    <!-- l'invito finale al configuratore -->
+    <section class="pr-finale">
+      <!-- la mascotte di Octulus: una piovra con gli occhiali -->
+      <img class="pr-mascotte pr-rivela" src="img/octulus.svg" width="180" height="180" alt="La mascotte di Octulus: una piovra con gli occhiali">
+      <h2 class="pr-titolo-sezione pr-rivela">Rendilo tuo.</h2>
+      <p class="pr-rivela"><a class="pr-bottone" href="#configura">Apri il configuratore</a></p>
+    </section>
+
+  </div>
+  <!-- ===== qui finisce la presentazione ===== -->
+
+    <!-- ===== qui inizia la sezione "In mostra" con il visualizzatore ===== -->
+    <div class="container content-wrapper sezione-configuratore" id="configura">
+        <div class="row mb-4">
+            <div class="col-12 col-lg-8">
+                <p class="sovratitolo">Configuratore</p>
+                <h2 class="font-3">Osserva l'occhiale</h2>
+            </div>
+        </div>
+        <div class="row mb-5">
+
+            <!-- PASSO 1: lo spazio per il 3D -->
+            <div class="col-12 col-lg-8">
+                <div id="visore" class="visore">
+                    <p class="visore-segnaposto">Carico il modello…</p>
+                </div>
+
+                <!-- le viste dell'occhiale: cliccandone una si vede in grande nel visore; "3D" riporta la vista ruotabile (vedi js/visore3d.js) -->
+                <div class="viste">
+                    <button type="button" class="vista selected" data-vista="3d" aria-pressed="true">
+                        <canvas></canvas>
+                        <span class="vista-nome">3D</span>
+                    </button>
+                    <button type="button" class="vista" data-vista="frontale" aria-pressed="false">
+                        <canvas></canvas>
+                        <span class="vista-nome">Frontale</span>
+                    </button>
+                    <button type="button" class="vista" data-vista="dietro" aria-pressed="false">
+                        <canvas></canvas>
+                        <span class="vista-nome">Da dietro</span>
+                    </button>
+                    <button type="button" class="vista" data-vista="laterale-sx" aria-pressed="false">
+                        <canvas></canvas>
+                        <span class="vista-nome">Laterale Sx</span>
+                    </button>
+                    <button type="button" class="vista" data-vista="laterale-dx" aria-pressed="false">
+                        <canvas></canvas>
+                        <span class="vista-nome">Laterale Dx</span>
+                    </button>
+                    <button type="button" class="vista" data-vista="alto" aria-pressed="false">
+                        <canvas></canvas>
+                        <span class="vista-nome">Dall'alto</span>
+                    </button>
+                </div>
+
+            </div>
+
+
+            <!-- PASSO 2: il pannello con il titolo e le opzioni da scegliere -->
+            <div class="col-12 col-lg-4">
+                <div class="pannello">
+                    <p class="sovratitolo">Modello 3D</p>
+                    <h3 class="font-3">Il mio occhiale</h3>
+                    <p class="descrizione">Gira l'occhiale, avvicinati con la rotella e scegli il colore di ogni pezzo: lenti, stanghe, nasello e montatura.</p>
+
+                    <details class="tendina">
+                        <summary class="tendina-titolo">Modalità <span class="tendina-destra"><span class="opzione-valore">Aperto</span><span class="freccia" aria-hidden="true"></span></span></summary>
+                        <!-- data-modalita: chiuso = le stanghe si piegano, aperto = si riaprono, indossato = lo vedi in prima persona (vedi js/visore3d.js) -->
+                        <div class="preset-gruppo">
+                            <button type="button" class="modalita" data-modalita="chiuso" data-nome="Chiuso">Chiuso</button>
+                            <button type="button" class="modalita selected" data-modalita="aperto" data-nome="Aperto">Aperto</button>
+                            <button type="button" class="modalita" data-modalita="indossato" data-nome="Indossato">Indossato</button>
+                            <!-- Scomponi non è una modalità come le altre: è un interruttore, ogni clic scompone o ricompone -->
+                            <button type="button" class="scomponi" aria-pressed="false">Scomponi</button>
+                        </div>
+                    </details>
+
+                    <details class="tendina">
+                        <summary class="tendina-titolo">Versioni <span class="tendina-destra"><span class="opzione-valore">Personalizzata</span><span class="freccia" aria-hidden="true"></span></span></summary>
+                        <!-- data-colori: i nomi dei colori dei gruppi da 1 a 5, nell'ordine, separati da virgole -->
+                        <div class="preset-gruppo">
+                            <button type="button" class="preset" data-nome="Vulcano" data-colori="Grigio antracite,Rosso avorio,Rosso avorio,Grigio antracite,Rosso avorio">Vulcano</button>
+                            <button type="button" class="preset" data-nome="Aputa" data-colori="Beige,Azzurro,Azzurro,Beige,Azzurro">Aputa</button>
+                            <button type="button" class="preset" data-nome="Ape" data-colori="Grigio antracite,Giallo ocra,Giallo ocra,Grigio antracite,Giallo ocra">Ape</button>
+                            <button type="button" class="preset" data-solo="mio" data-nome="Gargoz" data-colori="Grigio antracite,Grigio a pois rosa,Grigio a pois rosa,Grigio a pois rosa,Grigio a pois rosa">Gargoz</button>
+                        </div>
+                    </details>
+
+                    <!-- la tendina Personalizzazione: <details> si apre e chiude da solo cliccando sul titolo (<summary>) -->
+                    <details class="tendina">
+                        <summary class="tendina-titolo">Personalizzazione <span class="freccia" aria-hidden="true"></span></summary>
+
+                        <div class="opzione">
+                            <h3 class="opzione-titolo">1. Lenti <span class="opzione-valore">Grigio antracite</span></h3>
+                            <!-- data-pezzo: il pezzo dell'occhiale che questo gruppo colora (vedi js/visore3d.js) -->
+                            <div class="campioni" data-pezzo="lenti">
+                                <button type="button" class="campione selected" data-color="#3a3d40" data-nome="Grigio antracite" aria-label="Grigio antracite" style="background-color: #3a3d40;"></button>
+                                <button type="button" class="campione" data-color="#d9c7a7" data-nome="Beige" aria-label="Beige" style="background-color: #d9c7a7;"></button>
+                                <button type="button" class="campione" data-color="#b5473a" data-nome="Rosso avorio" aria-label="Rosso avorio" style="background-color: #b5473a;"></button>
+                                <button type="button" class="campione" data-color="#7fb3d5" data-nome="Azzurro" aria-label="Azzurro" style="background-color: #7fb3d5;"></button>
+                                <button type="button" class="campione" data-color="#c99a2e" data-nome="Giallo ocra" aria-label="Giallo ocra" style="background-color: #c99a2e;"></button>
+                                <!-- solo per Orbita: il grigio a pois rosa della versione Gargoz (i pois li disegna js/visore3d.js) -->
+                                <button type="button" class="campione campione-pois" data-solo="mio" data-color="pois:#8e9196:#ff8fc8" data-nome="Grigio a pois rosa" aria-label="Grigio a pois rosa"></button>
+                            </div>
+                        </div>
+
+                        <div class="opzione">
+                            <h3 class="opzione-titolo">2. Stanga Dx <span class="opzione-valore">Grigio antracite</span></h3>
+                            <!-- data-pezzo: il pezzo dell'occhiale che questo gruppo colora (vedi js/visore3d.js) -->
+                            <div class="campioni" data-pezzo="stanga-dx">
+                                <button type="button" class="campione selected" data-color="#3a3d40" data-nome="Grigio antracite" aria-label="Grigio antracite" style="background-color: #3a3d40;"></button>
+                                <button type="button" class="campione" data-color="#d9c7a7" data-nome="Beige" aria-label="Beige" style="background-color: #d9c7a7;"></button>
+                                <button type="button" class="campione" data-color="#b5473a" data-nome="Rosso avorio" aria-label="Rosso avorio" style="background-color: #b5473a;"></button>
+                                <button type="button" class="campione" data-color="#7fb3d5" data-nome="Azzurro" aria-label="Azzurro" style="background-color: #7fb3d5;"></button>
+                                <button type="button" class="campione" data-color="#c99a2e" data-nome="Giallo ocra" aria-label="Giallo ocra" style="background-color: #c99a2e;"></button>
+                                <!-- solo per Orbita: il grigio a pois rosa della versione Gargoz (i pois li disegna js/visore3d.js) -->
+                                <button type="button" class="campione campione-pois" data-solo="mio" data-color="pois:#8e9196:#ff8fc8" data-nome="Grigio a pois rosa" aria-label="Grigio a pois rosa"></button>
+                            </div>
+                        </div>
+
+                        <div class="opzione">
+                            <h3 class="opzione-titolo">3. Stanga Sx <span class="opzione-valore">Grigio antracite</span></h3>
+                            <!-- data-pezzo: il pezzo dell'occhiale che questo gruppo colora (vedi js/visore3d.js) -->
+                            <div class="campioni" data-pezzo="stanga-sx">
+                                <button type="button" class="campione selected" data-color="#3a3d40" data-nome="Grigio antracite" aria-label="Grigio antracite" style="background-color: #3a3d40;"></button>
+                                <button type="button" class="campione" data-color="#d9c7a7" data-nome="Beige" aria-label="Beige" style="background-color: #d9c7a7;"></button>
+                                <button type="button" class="campione" data-color="#b5473a" data-nome="Rosso avorio" aria-label="Rosso avorio" style="background-color: #b5473a;"></button>
+                                <button type="button" class="campione" data-color="#7fb3d5" data-nome="Azzurro" aria-label="Azzurro" style="background-color: #7fb3d5;"></button>
+                                <button type="button" class="campione" data-color="#c99a2e" data-nome="Giallo ocra" aria-label="Giallo ocra" style="background-color: #c99a2e;"></button>
+                                <!-- solo per Orbita: il grigio a pois rosa della versione Gargoz (i pois li disegna js/visore3d.js) -->
+                                <button type="button" class="campione campione-pois" data-solo="mio" data-color="pois:#8e9196:#ff8fc8" data-nome="Grigio a pois rosa" aria-label="Grigio a pois rosa"></button>
+                            </div>
+                        </div>
+
+                        <div class="opzione">
+                            <h3 class="opzione-titolo">4. Nasello <span class="opzione-valore">Grigio antracite</span></h3>
+                            <!-- data-pezzo: il pezzo dell'occhiale che questo gruppo colora (vedi js/visore3d.js) -->
+                            <div class="campioni" data-pezzo="nasello">
+                                <button type="button" class="campione selected" data-color="#3a3d40" data-nome="Grigio antracite" aria-label="Grigio antracite" style="background-color: #3a3d40;"></button>
+                                <button type="button" class="campione" data-color="#d9c7a7" data-nome="Beige" aria-label="Beige" style="background-color: #d9c7a7;"></button>
+                                <button type="button" class="campione" data-color="#b5473a" data-nome="Rosso avorio" aria-label="Rosso avorio" style="background-color: #b5473a;"></button>
+                                <button type="button" class="campione" data-color="#7fb3d5" data-nome="Azzurro" aria-label="Azzurro" style="background-color: #7fb3d5;"></button>
+                                <button type="button" class="campione" data-color="#c99a2e" data-nome="Giallo ocra" aria-label="Giallo ocra" style="background-color: #c99a2e;"></button>
+                                <!-- solo per Orbita: il grigio a pois rosa della versione Gargoz (i pois li disegna js/visore3d.js) -->
+                                <button type="button" class="campione campione-pois" data-solo="mio" data-color="pois:#8e9196:#ff8fc8" data-nome="Grigio a pois rosa" aria-label="Grigio a pois rosa"></button>
+                            </div>
+                        </div>
+
+                        <div class="opzione">
+                            <h3 class="opzione-titolo">5. Montatura centrale <span class="opzione-valore">Grigio antracite</span></h3>
+                            <!-- data-pezzo: il pezzo dell'occhiale che questo gruppo colora (vedi js/visore3d.js) -->
+                            <div class="campioni" data-pezzo="montatura">
+                                <button type="button" class="campione selected" data-color="#3a3d40" data-nome="Grigio antracite" aria-label="Grigio antracite" style="background-color: #3a3d40;"></button>
+                                <button type="button" class="campione" data-color="#d9c7a7" data-nome="Beige" aria-label="Beige" style="background-color: #d9c7a7;"></button>
+                                <button type="button" class="campione" data-color="#b5473a" data-nome="Rosso avorio" aria-label="Rosso avorio" style="background-color: #b5473a;"></button>
+                                <button type="button" class="campione" data-color="#7fb3d5" data-nome="Azzurro" aria-label="Azzurro" style="background-color: #7fb3d5;"></button>
+                                <button type="button" class="campione" data-color="#c99a2e" data-nome="Giallo ocra" aria-label="Giallo ocra" style="background-color: #c99a2e;"></button>
+                                <!-- solo per Orbita: il grigio a pois rosa della versione Gargoz (i pois li disegna js/visore3d.js) -->
+                                <button type="button" class="campione campione-pois" data-solo="mio" data-color="pois:#8e9196:#ff8fc8" data-nome="Grigio a pois rosa" aria-label="Grigio a pois rosa"></button>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <!-- ===== qui finisce la sezione "In mostra" ===== -->
+
+    <!-- ===== qui inizia la galleria degli altri occhiali ===== -->
+    <!-- le caselle dei modelli le costruisce js/visore3d.js dall'elenco in js/modelli.js:
+         cliccandone una si apre la pagina di dettaglio (dettaglio.html) di quel modello -->
+    <div class="container content-wrapper sezione-galleria" id="galleria">
+        <div class="row mb-4">
+            <div class="col-12 col-lg-8">
+                <p class="sovratitolo">Galleria</p>
+                <h2 class="font-3">Gli altri occhiali</h2>
+                <p class="descrizione">Clicca un modello per aprire la sua pagina: lo potrai girare, colorare, chiudere, scomporre e indossare.</p>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="galleria"></div>
+            </div>
+        </div>
+    </div>
+    <!-- ===== qui finisce la galleria ===== -->
+
+
+  <!-- ===== la prova con la fotocamera: si apre dalla sezione "Provali su di te" (vedi js/visore3d.js, sezione 13) =====
+       Ogni volta che si apre chiede il consenso; quando si chiude la fotocamera viene spenta -->
+  <dialog class="pr prova" aria-labelledby="prova-titolo">
+
+    <!-- passo 1: il consenso -->
+    <div class="prova-consenso">
+      <p class="pr-sovratitolo">Prova virtuale</p>
+      <h2 id="prova-titolo">Provali su di te.</h2>
+      <p>Per appoggiare l'occhiale sul tuo viso serve la fotocamera del dispositivo. Dopo che avrai consentito, il browser ti chiederà il permesso.</p>
+      <ul>
+        <li>Le immagini restano sul tuo dispositivo: non vengono registrate né inviate.</li>
+        <li>Quando chiudi la prova la fotocamera si spegne.</li>
+        <li>L'occhiale ha i colori che hai scelto nel configuratore.</li>
+      </ul>
+      <p class="prova-bottoni">
+        <button type="button" class="pr-bottone prova-consenti">Consenti la fotocamera</button>
+        <button type="button" class="prova-annulla">Annulla</button>
+      </p>
+    </div>
+
+    <!-- passo "telefono": il codice QR che apre la prova sul telefono, oppure l'iPhone come webcam del Mac -->
+    <div class="prova-qr-passo" hidden>
+      <p class="pr-sovratitolo">Con il telefono</p>
+      <h2>Inquadra il codice.</h2>
+      <div class="prova-qr-righe">
+        <div class="prova-qr" aria-label="Codice QR con l'indirizzo della prova"></div>
+        <div>
+          <p>Apri la fotocamera del telefono e inquadra il codice: si apre questa pagina, già pronta per la prova.</p>
+          <p class="prova-qr-link"><a href="#" target="_blank" rel="noopener"></a></p>
+          <p class="prova-qr-avviso" hidden></p>
+          <p class="prova-qr-mac">Hai un Mac e un iPhone? Con <strong>Continuity Camera</strong> l'iPhone diventa la fotocamera del computer: tienilo vicino, bloccato e in orizzontale, con Wi‑Fi e Bluetooth accesi.</p>
+        </div>
+      </div>
+      <p class="prova-bottoni">
+        <button type="button" class="pr-bottone prova-continuita">Usa l'iPhone come fotocamera</button>
+        <button type="button" class="prova-annulla">Chiudi</button>
+      </p>
+    </div>
+
+    <!-- passo 2: il video con l'occhiale sopra (nascosto finché la fotocamera non parte) -->
+    <div class="prova-scena" hidden>
+      <!-- il video e il disegno dell'occhiale sono specchiati insieme, come in uno specchio -->
+      <div class="prova-specchio">
+        <video class="prova-video" playsinline muted></video>
+        <canvas class="prova-occhiale"></canvas>
+      </div>
+      <p class="prova-stato" role="status">Avvio la fotocamera…</p>
+      <p class="prova-bottoni">
+        <!-- la scelta della fotocamera: compare solo se ce n'è più di una (per esempio webcam e iPhone) -->
+        <label class="prova-scegli" hidden>Fotocamera <select class="prova-fotocamere"></select></label>
+        <button type="button" class="prova-chiudi">Chiudi e spegni la fotocamera</button>
+      </p>
+    </div>
+
+    <!-- se qualcosa va storto (permesso negato, nessuna fotocamera...) -->
+    <div class="prova-errore" hidden>
+      <h2>Non riesco ad accendere la fotocamera.</h2>
+      <p class="prova-errore-testo"></p>
+      <p class="prova-bottoni">
+        <button type="button" class="pr-bottone prova-riprova">Riprova</button>
+        <button type="button" class="prova-annulla">Chiudi</button>
+      </p>
+    </div>
+  </dialog>
+
+
+    <!-- qui si inserisce il codice JavaScript -->
+<script src="js/configuratore.js"></script>
+
+<!-- il visualizzatore 3D: l'occhiale (models/occhiale.3dm) con Three.js -->
+<script type="module" src="js/visore3d.js"></script>
+<!-- il negozio: carrello, prezzi e "Aggiungi al carrello" (vedi js/carrello.js) -->
+<script type="module" src="js/carrello.js"></script>
+<!-- GSAP (https://gsap.com) con ScrollTrigger e SplitText: le animazioni della presentazione, in js/animazioni.js -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+
+<script src="js/presentazione.js"></script>
+<script src="js/animazioni.js"></script>
+
+
+
+
+</body>
+</html>
