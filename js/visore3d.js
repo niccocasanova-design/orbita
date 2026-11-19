@@ -1489,6 +1489,50 @@ function mostraProspettiva(casella, indice, evento) {
 }
 
 
+// la foto dell'occhiale COSÌ COM'È ADESSO nel visore (modello, colori, pois...), nello stesso studio
+// fotografico delle anteprime. La usa js/carrello.js quando aggiungi al carrello: nel carrello vedi
+// esattamente l'occhiale che stai comprando. Restituisce un'immagine JPEG (data URL), o null
+window.fotoConfigurazione = function() {
+    if (!M) {
+        return null;
+    }
+    const larghezza = Math.min(480, visore.clientWidth);
+    const altezza = Math.min(Math.round(larghezza * 0.75), visore.clientHeight);
+    if (!larghezza || !altezza) {
+        return null;
+    }
+    const pixel = Math.min(renderer.getPixelRatio(), 1.5);   // basta così: la foto resta leggera da salvare
+    const oggetto = { tela: document.createElement('canvas'), larghezza: larghezza, altezza: altezza };
+    oggetto.tela.width = Math.round(larghezza * pixel);
+    oggetto.tela.height = Math.round(altezza * pixel);
+
+    // sposto per un attimo l'occhiale nello studio, lo fotografo di tre quarti e lo rimetto nel visore
+    const scatola = new THREE.Box3().setFromObject(M.occhiale);
+    pavimentoAnteprime.position.y = scatola.min.y - 0.005;
+    cameraAnteprime.aspect = larghezza / altezza;
+    cameraAnteprime.updateProjectionMatrix();
+    cameraAnteprime.position.fromArray(PROSPETTIVE[0][1]);
+    cameraAnteprime.lookAt(0, -0.1, 0);
+    scenaAnteprime.add(M.occhiale);
+    try {
+        disegnaInTela(oggetto, function() {
+            renderer.render(scenaAnteprime, cameraAnteprime);
+        });
+    } finally {
+        scena.add(M.occhiale);
+    }
+
+    const foto = document.createElement('canvas');
+    foto.width = oggetto.tela.width;
+    foto.height = oggetto.tela.height;
+    const contesto = foto.getContext('2d');
+    fondoStudio(contesto, foto.width, foto.height);
+    contesto.drawImage(oggetto.tela, 0, 0);
+    ritoccoStudio(contesto, foto.width, foto.height);
+    visteDaAggiornare = true;
+    return foto.toDataURL('image/jpeg', 0.82);
+};
+
 // ===================================================================================
 // 11. L'ANIMAZIONE: a ogni fotogramma aggiorno i movimenti e ridisegno
 // ===================================================================================

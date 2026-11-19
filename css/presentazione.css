@@ -1923,3 +1923,38 @@ select.carrello-quantita {
         grid-template-columns: 110px 1fr;
     }
 }
+
+/* --- togliere dal carrello: un bottone ben visibile con il cestino, e "Svuota il carrello" --- */
+.carrello .carrello-togli,
+.carrello-svuota {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: solid 1px rgba(57, 255, 106, 0.6);
+    background: transparent;
+    color: #39ff6a;
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.carrello .carrello-togli:hover,
+.carrello-svuota:hover {
+    background: #ff5a6e;
+    border-color: #ff5a6e;
+    color: #000000;
+    text-shadow: none;
+    box-shadow: 0 0 12px rgba(255, 90, 110, 0.6);
+}
+
+.carrello-svuota {
+    margin-top: 20px;
+}
+
+.carrello-svuota[hidden] {
+    display: none;
+}
